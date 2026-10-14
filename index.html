@@ -171,16 +171,16 @@ function submit(){
   const o = C.options.find(x => x.id === pick.value), best = C.options.reduce((a,b) => b.score > a.score ? b : a);
   const strongSeen = C.docs.filter(d => d.weight === "strong" && seen.has(d.id)).length;
   const score = Math.max(0, Math.min(100, Math.round(o.score * 0.5 + (vOK ? 35 : 0) + Math.min(strongSeen,3)*5 + Math.min(asked,3)*1.7)));
-  const coins = Math.round(o.score / 2) + (vOK ? 15 : 0) + strongSeen * 5 + Math.min(asked,5) * 2;
+  const coins = Math.round(o.score / 2) + (vOK ? 20 : -25) + (o.score < 40 ? -15 : 0) + strongSeen * 5 + Math.min(asked,5) * 2;
   const rating = score >= 85 ? "Thám tử xuất sắc" : score >= 65 ? "Điều tra viên vững" : score >= 40 ? "Cần đối chiếu kỹ hơn" : "Còn dễ bị đánh lừa";
-  S.coins += coins; S.solved++; S.history.push({title:C.title, level, score, rating}); save(); renderRes(o, best, score, coins, rating, vd.value, vOK);
+  S.coins = Math.max(0, S.coins + coins); S.solved++; S.history.push({title:C.title, level, score, rating}); save(); renderRes(o, best, score, coins, rating, vd.value, vOK);
 }
 const NAMES = {scam:"Lừa đảo", legit:"Hợp pháp", unclear:"Chưa đủ bằng chứng"};
 function renderRes(o, best, score, coins, rating, pv, vOK){
   const r = $("vRes"); r.replaceChildren();
   const V = {scam:"Đây là lừa đảo có chủ đích.", legit:"Tình huống này thực chất hợp pháp.", unclear:"Chưa đủ bằng chứng để kết luận."}[C.truth.verdict] || "";
   r.append(el("h2",{}, "Kết thúc vụ án: " + C.title),
-    el("div",{class:"panel"}, el("b",{}, rating + " — " + score + "/100"), el("br"), "Bạn nhận " + coins + " xu (đã tính manh mối quan trọng đã mở và câu hỏi hữu ích)."),
+    el("div",{class:"panel"}, el("b",{}, rating + " — " + score + "/100"), el("br"), (coins >= 0 ? "Bạn nhận +" + coins + " xu" : "Bạn mất " + (-coins) + " xu") + " (tính cả manh mối đã mở, câu hỏi hữu ích, kết luận và hướng xử lý" + (vOK ? "" : "; kết luận sai bị trừ 25 xu") + (o.score < 40 ? "; hướng xử lý rủi ro bị trừ 15 xu" : "") + ")."),
     el("h2",{}, "Sự thật nền"), el("div",{class:"panel"}, el("b",{}, V + " "), C.truth.summary, el("br"), el("span",{class:"mut"}, "Kết luận của bạn: " + NAMES[pv] + (vOK ? " — đúng." : " — chưa đúng."))));
   const th = $("theory").value.trim(); if(th) r.append(el("p",{class:"mut"}, "Giả thuyết bạn đã viết: " + th));
   r.append(el("h2",{}, "Lựa chọn của bạn"), el("div",{class:"panel"}, o.text, el("br"), el("span",{class:"mut"}, o.why)));
