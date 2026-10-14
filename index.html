@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Thám tử không gian mạng — Click tỉnh táo</title>
+<style>
+:root{--bg:#E8EDF1;--ink:#16233B;--panel:#F8FAFB;--line:#B9C4CE;--tag:#D99A00;--bad:#B3261E;--ok:#1F7A5A;--mut:#56657A}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,"Segoe UI",sans-serif}
+main{max-width:880px;margin:0 auto;padding:16px}
+header{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:10px 0 14px;border-bottom:2px solid var(--ink)}
+h1{font:700 1.5rem/1.2 Georgia,serif;margin:0}h2{font:700 1.2rem Georgia,serif;margin:18px 0 8px}
+.stats{display:flex;gap:14px;font-weight:600}.stats span{background:var(--panel);border:1px solid var(--line);padding:4px 10px;border-radius:6px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:14px;margin:12px 0}
+label{display:block;margin:6px 0}select,textarea,input[type=text]{width:100%;font:inherit;padding:8px;border:1px solid var(--line);border-radius:6px;background:#fff;color:var(--ink)}
+button{font:inherit;font-weight:600;padding:9px 16px;border:2px solid var(--ink);background:var(--ink);color:#fff;border-radius:6px;cursor:pointer}
+button.alt{background:transparent;color:var(--ink)}button:disabled{opacity:.5;cursor:wait}
+button:focus-visible,select:focus-visible,textarea:focus-visible,input:focus-visible{outline:3px solid var(--tag);outline-offset:2px}
+.levels{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px}
+.levels label{border:1px solid var(--line);border-radius:6px;padding:10px;background:#fff;margin:0}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin:14px 0 0}.tabs button{border-radius:6px 6px 0 0}
+.doc{border:1px solid var(--line);border-left:10px solid var(--tag);background:#fff;padding:10px 12px;margin:10px 0;border-radius:2px 6px 6px 2px}
+.doc h3{margin:0 0 4px;font-size:1rem}.doc pre{white-space:pre-wrap;font:.95rem/1.5 "Courier New",monospace;margin:6px 0 0}
+.chat{max-height:320px;overflow:auto;border:1px solid var(--line);background:#fff;padding:8px;border-radius:6px}
+.msg{margin:6px 0;padding:7px 10px;border-radius:6px;max-width:85%}.me{background:var(--ink);color:#fff;margin-left:auto}.them{background:#E3E9EE}
+.row{display:flex;gap:8px;margin-top:8px}.row input{flex:1}
+.err{background:#FBE9E7;border:1px solid var(--bad);color:var(--bad);padding:10px;border-radius:6px;margin:10px 0}
+.tag{display:inline-block;font-size:.8rem;padding:1px 8px;border-radius:10px;color:#fff;margin-left:6px}
+.strong{background:var(--bad)}.weak{background:var(--tag)}.noise{background:var(--mut)}.neutral{background:#7C8B9C}
+.hide{display:none}.mut{color:var(--mut)}
+@media(max-width:520px){.msg{max-width:95%}.stats{font-size:.9rem}}
+@media(prefers-reduced-motion:no-preference){.doc{transition:border-color .2s}}
+</style></head><body><main>
+<header><h1>Thám tử không gian mạng</h1><div class="stats"><span id="sCoin"></span><span id="sSolved"></span></div></header>
+<div id="err" class="err hide" role="alert"></div>
+
+<section id="vStart">
+ <div class="panel"><b>Hồ sơ mới.</b> Mọi nhân vật, link và số liệu đều là dữ liệu giả. Đừng bao giờ nhập thông tin thật vào game.</div>
+ <h2>Chọn cấp độ</h2><div class="levels" id="levels"></div>
+ <h2>Chọn loại vụ án</h2><select id="topic"></select>
+ <p><button id="bNew"></button> <span id="busy" class="mut hide">AI đang soạn hồ sơ, chờ khoảng 10–30 giây…</span></p>
+ <p class="mut">Tiến trình (xu, số vụ đã giải, lịch sử) lưu trong trình duyệt này, không đồng bộ giữa các thiết bị.</p>
+ <h2>Vụ án đã giải</h2><div id="hist"></div>
+</section>
+
+<section id="vCase" class="hide">
+ <h2 id="cTitle"></h2><p id="cIntro"></p>
+ <div class="tabs"><button data-t="docs">Bằng chứng</button><button class="alt" data-t="talk">Thẩm vấn</button><button class="alt" data-t="decide">Kết luận</button></div>
+ <div class="panel">
+  <div id="tdocs"></div>
+  <div id="ttalk" class="hide">
+   <label>Hỏi ai? <select id="who"></select></label>
+   <div class="chat" id="chat" aria-live="polite"></div>
+   <div class="row"><input type="text" id="q" maxlength="300" placeholder="Nhập câu hỏi bằng tiếng Việt"><button id="bAsk">Hỏi</button></div>
+   <p><button class="alt" id="bHint">Xin gợi ý (−10 xu)</button></p>
+  </div>
+  <div id="tdecide" class="hide">
+   <p><b>Giả thuyết của bạn</b> (không bắt buộc, sẽ hiện lại ở phần tổng kết)</p><textarea id="theory" rows="3" maxlength="500"></textarea>
+   <p><b>Bạn sẽ làm gì?</b></p><div id="opts"></div><button id="bSubmit">Nộp kết luận</button>
+  </div>
+ </div>
+</section>
+
+<section id="vRes" class="hide"></section>
+
+<script>
+const API = "https://thamtumang.ng-huynhmquan-09.workers.dev"; // dán URL Worker mới, không có dấu / ở cuối
+const LV = [["Tập sự","Có hướng dẫn, dấu hiệu khá rõ.",0],["Điều tra viên","Manh mối rải rác, phải đối chiếu.",20],["Thám tử chuyên nghiệp","Bề mặt rất hợp lý, nhiều lớp.",40]];
+const TOPICS = ["Ngẫu nhiên","Tuyển dụng, việc nhẹ lương cao","Trúng thưởng, hoàn tiền giả","Giả danh ngân hàng, tổ chức tài chính","Chiếm đoạt tài khoản mạng xã hội","Mua bán trực tuyến, biên lai giả","Mạo danh người thân, bạn bè, giáo viên","Học bổng, tuyển sinh","Hỗ trợ kỹ thuật, chăm sóc khách hàng giả","Hội nhóm, hoạt động cộng đồng","Giả mạo danh tính, hồ sơ, giấy tờ","QR code, trang đăng nhập giả","Kết hợp nhiều thủ đoạn"];
+const $ = id => document.getElementById(id);
+function el(tag, props = {}, ...kids){const e=document.createElement(tag);for(const k in props){if(k==="class")e.className=props[k];else if(k.startsWith("on"))e[k]=props[k];else e.setAttribute(k,props[k]);}for(const c of kids)e.append(c);return e;}
+let S = {coins:100,solved:0,history:[]}, level = 1, C = null, seen = new Set(), asked = 0, hist = [], hints = 0, busy = false;
+try { S = Object.assign(S, JSON.parse(localStorage.getItem("ttkgm") || "{}")); } catch {}
+const save = () => { try { localStorage.setItem("ttkgm", JSON.stringify(S)); } catch {} stats(); };
+function stats(){ $("sCoin").textContent = "Xu: " + S.coins; $("sSolved").textContent = "Đã giải: " + S.solved; }
+function showErr(m){ $("err").textContent = m; $("err").classList.toggle("hide", !m); }
+function view(v){ ["vStart","vCase","vRes"].forEach(x => $(x).classList.toggle("hide", x !== v)); scrollTo(0,0); }
+
+async function call(path, body){
+  const ac = new AbortController(), t = setTimeout(() => ac.abort(), 60000);
+  try{
+    const r = await fetch(API + path, {method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify(body), signal:ac.signal});
+    const d = await r.json().catch(() => ({}));
+    if(!r.ok) throw new Error(d.error || "Máy chủ trả mã lỗi " + r.status);
+    return d;
+  }catch(e){
+    if(e.name === "AbortError") throw new Error("Chờ quá lâu (60 giây). Hãy thử lại.");
+    if(e instanceof TypeError) throw new Error("Không kết nối được tới máy chủ AI. Kiểm tra địa chỉ Worker trong index.html (hiện: " + API + ").");
+    throw e;
+  }finally{ clearTimeout(t); }
+}
+
+function initStart(){
+  const box = $("levels");
+  LV.forEach((l,i) => { const r = el("input",{type:"radio",name:"lv",value:i+1}); if(i===0) r.checked = true; r.onchange = () => level = i+1;
+    box.append(el("label",{}, r, " ", el("b",{}, l[0]), el("br"), el("span",{class:"mut"}, l[1] + (l[2] ? " (−" + l[2] + " xu)" : " (miễn phí)")))); });
+  TOPICS.forEach(t => $("topic").append(el("option",{}, t)));
+  $("bNew").onclick = newCase; refreshBtn(); renderHist(); stats();
+}
+function refreshBtn(){ $("bNew").textContent = "Mở hồ sơ mới" + (LV[level-1][2] ? " (−" + LV[level-1][2] + " xu)" : ""); }
+document.addEventListener("change", e => { if(e.target.name === "lv") refreshBtn(); });
+function renderHist(){
+  const h = $("hist"); h.replaceChildren();
+  if(!S.history.length){ h.append(el("p",{class:"mut"},"Chưa có vụ nào. Mở hồ sơ đầu tiên để bắt đầu.")); return; }
+  S.history.slice(-8).reverse().forEach(x => h.append(el("div",{class:"doc"}, el("b",{}, x.title), " — " + x.rating + " (" + x.score + "/100, " + LV[x.level-1][0] + ")")));
+}
+
+async function newCase(){
+  if(busy) return; const cost = LV[level-1][2];
+  if(S.coins < cost){ showErr("Không đủ xu. Hãy chọn cấp thấp hơn hoặc giải thêm vụ án."); return; }
+  showErr(""); busy = true; $("bNew").disabled = true; $("busy").classList.remove("hide");
+  try{
+    const topic = $("topic").value;
+    const d = await call("/api/case", {level, topic: topic === "Ngẫu nhiên" ? "" : topic, recent: S.history.map(h => h.title)});
+    S.coins -= cost; save(); C = d.case; seen = new Set(); asked = 0; hist = []; hints = 0;
+    $("cTitle").textContent = C.title; $("cIntro").textContent = C.intro; $("theory").value = "";
+    renderDocs(); renderTalk(); renderOpts(); tab("docs"); view("vCase");
+  }catch(e){ showErr("Không tạo được vụ án: " + e.message); }
+  finally{ busy = false; $("bNew").disabled = false; $("busy").classList.add("hide"); }
+}
+
+function tab(t){ document.querySelectorAll(".tabs button").forEach(b => b.classList.toggle("alt", b.dataset.t !== t)); ["docs","talk","decide"].forEach(x => $("t"+x).classList.toggle("hide", x !== t)); }
+document.querySelectorAll(".tabs button").forEach(b => b.onclick = () => tab(b.dataset.t));
+
+function renderDocs(){
+  const box = $("tdocs"); box.replaceChildren(el("p",{class:"mut"},"Mở từng tài liệu để đọc. Không phải chi tiết lạ nào cũng chứng minh được điều gì."));
+  C.docs.forEach(d => { const open = seen.has(d.id);
+    const card = el("div",{class:"doc"}, el("h3",{}, d.title));
+    if(open) card.append(el("pre",{}, d.text)); else card.append(el("button",{class:"alt",onclick:() => { seen.add(d.id); renderDocs(); }}, "Xem tài liệu"));
+    box.append(card); });
+}
+function renderTalk(){
+  const w = $("who"); w.replaceChildren(); C.characters.forEach(c => w.append(el("option",{value:c.id}, c.name + " — " + c.role)));
+  $("chat").replaceChildren(); $("bAsk").onclick = ask; $("bHint").onclick = hint; $("q").onkeydown = e => { if(e.key === "Enter") ask(); };
+}
+function bubble(cls, text){ const b = el("div",{class:"msg " + cls}, text); $("chat").append(b); $("chat").scrollTop = 1e9; return b; }
+async function ask(){
+  const q = $("q").value.trim(); if(!q || busy) return; busy = true; $("bAsk").disabled = true; showErr("");
+  bubble("me", q); $("q").value = ""; const wait = bubble("them mut", "…");
+  try{
+    const d = await call("/api/chat", {case:C, characterId:$("who").value, message:q, history:hist});
+    hist.push({role:"user",text:q},{role:"ai",text:d.reply}); asked++; wait.className = "msg them"; wait.textContent = d.reply;
+  }catch(e){ wait.remove(); showErr("Không hỏi được: " + e.message); }
+  finally{ busy = false; $("bAsk").disabled = false; }
+}
+async function hint(){
+  if(busy) return; if(S.coins < 10){ showErr("Không đủ xu để xin gợi ý."); return; } busy = true; showErr("");
+  try{ const d = await call("/api/chat", {case:C, characterId:C.characters[0].id, mode:"hint", history:hist}); S.coins -= 10; hints++; save(); bubble("them", "Gợi ý: " + d.reply); }
+  catch(e){ showErr("Không lấy được gợi ý: " + e.message); } finally{ busy = false; }
+}
+
+function shuffle(a){ a = a.slice(); for(let i=a.length-1;i>0;i--){ const j = Math.floor(Math.random()*(i+1)); [a[i],a[j]] = [a[j],a[i]]; } return a; }
+function renderOpts(){
+  const box = $("opts"); box.replaceChildren();
+  shuffle(C.options).forEach(o => box.append(el("label",{}, el("input",{type:"radio",name:"opt",value:o.id}), " " + o.text)));
+  $("bSubmit").onclick = submit;
+}
+function submit(){
+  const pick = document.querySelector("input[name=opt]:checked");
+  if(!pick){ showErr("Hãy chọn một hướng xử lý trước khi nộp."); return; } showErr("");
+  const o = C.options.find(x => x.id === pick.value), best = C.options.reduce((a,b) => b.score > a.score ? b : a);
+  const strongSeen = C.docs.filter(d => d.weight === "strong" && seen.has(d.id)).length;
+  const score = Math.max(0, Math.min(100, Math.round(o.score * 0.8 + Math.min(strongSeen,3)*5 + Math.min(asked,3)*1.7 - 0)));
+  const coins = Math.round(o.score / 2) + strongSeen * 5 + Math.min(asked,5) * 2;
+  const rating = score >= 85 ? "Thám tử xuất sắc" : score >= 65 ? "Điều tra viên vững" : score >= 40 ? "Cần đối chiếu kỹ hơn" : "Còn dễ bị đánh lừa";
+  S.coins += coins; S.solved++; S.history.push({title:C.title, level, score, rating}); save(); renderRes(o, best, score, coins, rating);
+}
+function renderRes(o, best, score, coins, rating){
+  const r = $("vRes"); r.replaceChildren();
+  const V = {scam:"Đây là lừa đảo có chủ đích.", legit:"Tình huống này thực chất hợp pháp.", unclear:"Chưa đủ bằng chứng để kết luận."}[C.truth.verdict] || "";
+  r.append(el("h2",{}, "Kết thúc vụ án: " + C.title),
+    el("div",{class:"panel"}, el("b",{}, rating + " — " + score + "/100"), el("br"), "Bạn nhận " + coins + " xu (đã tính manh mối quan trọng đã mở và câu hỏi hữu ích)."),
+    el("h2",{}, "Sự thật nền"), el("div",{class:"panel"}, el("b",{}, V + " "), C.truth.summary));
+  const th = $("theory").value.trim(); if(th) r.append(el("p",{class:"mut"}, "Giả thuyết bạn đã viết: " + th));
+  r.append(el("h2",{}, "Lựa chọn của bạn"), el("div",{class:"panel"}, o.text, el("br"), el("span",{class:"mut"}, o.why)));
+  if(best.id !== o.id) r.append(el("div",{class:"panel"}, el("b",{}, "Hướng tốt nhất: "), best.text, el("br"), el("span",{class:"mut"}, best.why)));
+  r.append(el("h2",{}, "Ý nghĩa từng tài liệu"));
+  const names = {strong:"bằng chứng mạnh",weak:"gián tiếp",noise:"gây nhiễu",neutral:"trung tính"};
+  C.docs.forEach(d => r.append(el("div",{class:"doc"}, el("h3",{}, d.title, el("span",{class:"tag " + d.weight}, names[d.weight]), seen.has(d.id) ? "" : el("span",{class:"mut"}," (bạn chưa mở)")), el("p",{}, d.meaning))));
+  r.append(el("h2",{}, "Áp dụng ngoài đời"), el("ul",{}, ...C.tips.map(t => el("li",{}, t))), el("p",{}, el("button",{onclick:() => { renderHist(); view("vStart"); }}, "Về danh sách hồ sơ")));
+  view("vRes");
+}
+initStart();
+</script></main></body></html>
