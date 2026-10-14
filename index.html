@@ -1,218 +1,84 @@
-<!DOCTYPE html>
-<html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Thám tử không gian mạng — Click tỉnh táo</title>
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;700&family=Source+Code+Pro:wght@400;600&display=swap&subset=vietnamese" rel="stylesheet">
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#101d2b"><title>Thám tử không gian mạng — Click tỉnh táo</title>
 <style>
-:root{--bg:#EEF3F6;--ink:#0E2038;--line:#C5D1DB;--tag:#F2A900;--bad:#D7263D;--ok:#1B998B;--mut:#5B6B7F;--acc:#007C80}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 "Be Vietnam Pro",system-ui,"Segoe UI",Arial,sans-serif}
-main{max-width:880px;margin:0 auto;padding:16px}
-header{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;background:var(--ink);color:#fff;margin:-16px -16px 16px;padding:18px 16px;border-radius:0 0 16px 16px}
-h1{font:800 1.45rem/1.3 "Be Vietnam Pro",system-ui,Arial,sans-serif;margin:0}h2{font:700 1.2rem/1.4 "Be Vietnam Pro",system-ui,Arial,sans-serif;margin:20px 0 8px}
-.stats{display:flex;gap:8px;flex-wrap:wrap;font-weight:600;font-size:.92rem}.stats span{background:rgba(255,255,255,.14);padding:4px 12px;border-radius:20px}
-.panel{background:#fff;border:2px solid var(--ink);border-radius:10px;padding:14px;margin:12px 0;box-shadow:4px 4px 0 var(--ink)}
-label{display:block;margin:6px 0}select,textarea,input[type=text]{width:100%;font:inherit;padding:9px;border:2px solid var(--line);border-radius:8px;background:#fff;color:var(--ink)}
-button{font:inherit;font-weight:700;padding:10px 18px;border:2px solid var(--ink);background:var(--acc);color:#fff;border-radius:8px;cursor:pointer;box-shadow:3px 3px 0 var(--ink)}
-button:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
-button.alt{background:#fff;color:var(--ink)}button:disabled{opacity:.5;cursor:wait}
-button:focus-visible,select:focus-visible,textarea:focus-visible,input:focus-visible{outline:3px solid var(--tag);outline-offset:2px}
-.levels{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
-.levels label{border:2px solid var(--line);border-radius:10px;padding:12px;background:#fff;margin:0;cursor:pointer}
-.levels label:has(input:checked){border-color:var(--acc);background:#E3F4F4;box-shadow:3px 3px 0 var(--acc)}
-.tabs{display:flex;gap:6px;flex-wrap:wrap;margin:14px 0 4px}.tabs button{padding:8px 12px;box-shadow:none;border-radius:10px 10px 4px 4px}
-.tabs button:not(.alt){background:var(--ink)}
-.doc{border:2px solid var(--ink);border-left:12px solid var(--tag);background:#fff;padding:10px 12px;margin:10px 0;border-radius:4px 10px 10px 4px}
-.doc h3{margin:0 0 4px;font-size:1rem}.doc pre{white-space:pre-wrap;font:.92rem/1.6 "Source Code Pro","Courier New",monospace;margin:6px 0 0}
-.doc button{padding:6px 12px;box-shadow:2px 2px 0 var(--ink)}
-.chat{max-height:320px;overflow:auto;border:2px solid var(--line);background:#fff;padding:8px;border-radius:10px}
-.msg{margin:6px 0;padding:8px 12px;border-radius:14px;max-width:85%}.me{background:var(--acc);color:#fff;margin-left:auto;border-bottom-right-radius:4px}.them{background:#E3E9EE;border-bottom-left-radius:4px}
-.row{display:flex;gap:8px;margin-top:8px}.row input{flex:1}
-.err{background:#FDE8EB;border:2px solid var(--bad);color:#8F1424;padding:10px 12px;border-radius:10px;margin:10px 0}
-.news{background:#FFF1C9;border:2px solid var(--tag);padding:8px 12px;border-radius:10px;margin:8px 0}
-.tag{display:inline-block;font-size:.8rem;padding:1px 9px;border-radius:10px;color:#fff;margin-left:6px}
-.strong{background:var(--bad)}.weak{background:#9A6A00}.noise{background:var(--mut)}.neutral{background:#6B7A8C}
-.stamp{display:inline-block;font:800 1.8rem/1 "Be Vietnam Pro",system-ui,sans-serif;border:5px solid;padding:8px 18px;border-radius:8px;transform:rotate(-5deg);margin:6px 0 12px;background:#fff}
-.stamp.scam{color:var(--bad)}.stamp.legit{color:var(--ok)}.stamp.unclear{color:#8A6100}
-.hide{display:none}.mut{color:var(--mut)}
-@media(prefers-reduced-motion:no-preference){.stamp{animation:st .45s cubic-bezier(.2,1.6,.4,1)}@keyframes st{from{transform:rotate(-5deg) scale(2.2);opacity:0}}}
-@media(max-width:520px){.msg{max-width:95%}h1{font-size:1.25rem}}
-</style></head><body><main>
-<header><h1>🕵️ Thám tử không gian mạng</h1><div class="stats"><span id="sCoin"></span><span id="sSolved"></span></div></header>
-<div id="err" class="err hide" role="alert"></div>
-
-<section id="vStart">
- <div class="panel"><b>Hồ sơ mới.</b> Mọi nhân vật, link và số liệu đều là dữ liệu giả. Đừng bao giờ nhập thông tin thật vào game.</div>
- <h2>Chọn cấp độ</h2><div class="levels" id="levels"></div>
- <h2>Chọn loại vụ án</h2><select id="topic"></select>
- <p><button id="bNew"></button> <span id="busy" class="mut hide">AI đang soạn hồ sơ, chờ khoảng 10–30 giây…</span></p>
- <p class="mut">Tiến trình (xu, số vụ đã giải, lịch sử) lưu trong trình duyệt này, không đồng bộ giữa các thiết bị.</p>
- <h2>Vụ án đã giải</h2><div id="hist"></div>
-</section>
-
-<section id="vCase" class="hide">
- <h2 id="cTitle"></h2><p id="cIntro"></p><div id="ev" aria-live="polite"></div>
- <div class="tabs"><button data-t="docs">📁 Bằng chứng</button><button class="alt" data-t="tools">🛠️ Công cụ</button><button class="alt" data-t="talk">💬 Thẩm vấn</button><button class="alt" data-t="decide">⚖️ Kết luận</button></div>
- <div class="panel">
-  <div id="tdocs"></div>
-  <div id="ttools" class="hide"></div>
-  <div id="ttalk" class="hide">
-   <label>Hỏi ai? <select id="who"></select></label>
-   <div class="chat" id="chat" aria-live="polite"></div>
-   <div class="row"><input type="text" id="q" maxlength="300" placeholder="Nhập câu hỏi bằng tiếng Việt"><button id="bAsk">Hỏi</button></div>
-   <p><button class="alt" id="bHint">Xin gợi ý (−10 xu)</button></p>
-  </div>
-  <div id="tdecide" class="hide">
-   <p><b>Giả thuyết của bạn</b> (không bắt buộc, sẽ hiện lại ở phần tổng kết)</p><textarea id="theory" rows="3" maxlength="500"></textarea>
-   <p><b>Theo bạn, tình huống này là gì?</b></p>
-   <label><input type="radio" name="vd" value="scam"> Lừa đảo có chủ đích</label>
-   <label><input type="radio" name="vd" value="legit"> Hợp pháp (có thể có sơ suất nhỏ)</label>
-   <label><input type="radio" name="vd" value="unclear"> Chưa đủ bằng chứng để kết luận</label>
-   <p><b>Bạn sẽ làm gì?</b></p><div id="opts"></div><button id="bSubmit">Nộp kết luận</button>
-  </div>
+:root{color-scheme:dark;--night:#101a26;--navy:#172637;--navy2:#203448;--edge:#405163;--paper:#eee3ca;--paper2:#dfd0ad;--ink:#202b32;--muted:#a7b2bd;--gold:#e3b65b;--gold2:#f2d18c;--teal:#78b9ad;--red:#bd746c;--green:#83b49b;--shadow:0 20px 55px #050a1070;--sans:"Segoe UI",Tahoma,Arial,sans-serif;--serif:"Segoe UI",Tahoma,Arial,sans-serif}
+*{box-sizing:border-box}html{background:var(--night)}body{margin:0;background:radial-gradient(ellipse at 52% 20%,#263b4b 0,#131f2c 55%,#0d1620 100%);color:#edf0ed;font:15px/1.55 var(--sans);min-height:100vh}button,input,select,textarea{font:inherit}button{color:inherit}button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid var(--gold);outline-offset:3px}button{cursor:pointer}.hide{display:none!important}.mut{color:var(--muted)}.eyebrow{font-size:.69rem;text-transform:uppercase;letter-spacing:.18em;color:var(--gold2);font-weight:700}.serif{font-family:var(--serif);font-weight:700;letter-spacing:-.025em}.shell{max-width:1540px;margin:auto;padding:0 26px 38px}.topbar{height:76px;display:flex;align-items:center;justify-content:space-between;gap:20px;border-bottom:1px solid #ffffff18}.brand{display:flex;align-items:center;gap:13px}.brand-mark{width:42px;height:42px;display:grid;place-items:center;border:1px solid #bda66d66;border-radius:50%;color:var(--gold2);font:22px var(--serif);box-shadow:inset 0 0 0 4px #e3b65b10}.brand-name{font:18px var(--serif);letter-spacing:.02em}.brand-sub{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#9baab6}.hud{display:flex;align-items:center;gap:7px}.hud-item{padding:7px 11px;border:1px solid #ffffff1a;border-radius:8px;background:#ffffff08;font-size:12px;color:#d7dedf}.hud-item strong{color:var(--gold2);font-weight:700}.hud-item small{display:block;color:#92a1ac;font-size:9px;letter-spacing:.12em;text-transform:uppercase}.icon-button,.quiet-button{border:1px solid #ffffff22;background:#ffffff08;color:#dce1dd;border-radius:8px;padding:8px 11px}.icon-button:hover,.quiet-button:hover{border-color:var(--gold);color:var(--gold2)}
+.view{animation:fadein .3s ease both}@keyframes fadein{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
+/* Main menu: illustrated room built from local CSS shapes. */
+.menu{min-height:calc(100vh - 115px);display:grid;grid-template-columns:minmax(0,1.15fr) minmax(320px,.85fr);gap:44px;align-items:center;padding:42px 0}.room{position:relative;height:min(590px,66vw);min-height:390px;border:1px solid #a78d5c40;border-radius:15px;overflow:hidden;background:linear-gradient(180deg,#172737 0 52%,#253849 52% 68%,#17232e 68%),radial-gradient(ellipse at 50% 100%,#d29b4730,transparent 50%);box-shadow:var(--shadow),inset 0 0 100px #050b12}.room:before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,#0a131c90,transparent 20% 80%,#0a131c90),repeating-linear-gradient(90deg,transparent 0 103px,#a6b6ba0b 104px 106px);pointer-events:none}.window{position:absolute;top:10%;left:14%;width:30%;height:39%;border:8px solid #344553;background:linear-gradient(180deg,#182b3a 0 55%,#bd905d 56%,#252d35 100%);box-shadow:0 0 30px #9db7bb18,inset 0 0 25px #121d29}.window:before,.window:after{content:"";position:absolute;background:#384b57}.window:before{width:5px;height:100%;left:50%}.window:after{height:5px;width:100%;top:54%}.window-light{position:absolute;top:15%;left:18%;width:22%;height:30%;background:linear-gradient(140deg,#f2cc8060,transparent 65%);filter:blur(12px)}.shelf{position:absolute;right:12%;top:21%;height:18%;width:30%;border-top:9px solid #5d5144;border-bottom:9px solid #5d5144;background:linear-gradient(90deg,transparent 14%,#9a7556 15% 24%,transparent 25% 46%,#697b7e 47% 58%,transparent 59% 73%,#8c6850 74% 84%,transparent 85%)}.desk{position:absolute;left:5%;right:5%;bottom:11%;height:23%;background:linear-gradient(180deg,#806447 0 10%,#513e31 11% 100%);clip-path:polygon(0 0,100% 0,91% 100%,9% 100%);box-shadow:0 -9px 25px #d59b4c16}.desk-top{position:absolute;left:9%;right:9%;bottom:32%;height:11%;transform:perspective(180px) rotateX(12deg);background:linear-gradient(90deg,#6b5039,#99734d 50%,#624832);box-shadow:0 12px 25px #090d12}.lamp{position:absolute;right:21%;bottom:44%;width:68px;height:96px}.lamp:before{content:"";position:absolute;left:24px;top:0;width:40px;height:28px;background:#d2ad68;clip-path:polygon(15% 0,100% 0,75% 100%,0 100%);filter:drop-shadow(0 0 14px #e9bd6370)}.lamp:after{content:"";position:absolute;left:39px;top:25px;width:5px;height:65px;background:#b59660;transform:rotate(10deg);transform-origin:top}.lamp-base{position:absolute;bottom:0;left:19px;width:43px;height:7px;border-radius:50%;background:#bb9d6a}.paper-stack{position:absolute;left:26%;bottom:39%;width:22%;height:45px;transform:rotate(-5deg);background:var(--paper);box-shadow:9px 7px 0 #c8b58d,18px 13px 0 #8c7558}.paper-stack:after{content:"CASE / 07";position:absolute;left:12px;top:8px;color:#43515a;font:10px var(--sans);letter-spacing:.2em}.mug{position:absolute;right:33%;bottom:41%;width:31px;height:32px;border-radius:4px 4px 12px 12px;background:#273c49;box-shadow:inset 0 5px #657178}.mug:after{content:"";position:absolute;right:-9px;top:6px;width:10px;height:14px;border:3px solid #344e5a;border-left:0;border-radius:0 10px 10px 0}.room-caption{position:absolute;left:22px;bottom:17px;color:#b8c2c5;font-size:10px;letter-spacing:.14em;text-transform:uppercase}.menu-copy{max-width:530px}.menu-copy h1{font:700 clamp(42px,5.2vw,72px)/.98 var(--serif);margin:15px 0 19px;letter-spacing:-.025em}.menu-copy h1 span{color:var(--gold2)}.menu-copy>p{color:#b8c2c8;max-width:460px;margin:0 0 24px}.menu-actions{display:flex;gap:11px;flex-wrap:wrap;margin:20px 0 28px}.primary{background:var(--gold);color:#1e2730;border:1px solid #f3d38d;padding:12px 18px;border-radius:7px;font-weight:800;box-shadow:0 5px 20px #d19c3c22}.primary:hover{background:#f0ca78;transform:translateY(-1px)}.secondary{background:transparent;border:1px solid #8996a066;padding:11px 16px;border-radius:7px;color:#e3e7e5}.secondary:hover{border-color:var(--gold);color:var(--gold2)}.level-picker{display:grid;gap:8px}.level-card{display:grid;grid-template-columns:20px 1fr auto;gap:11px;align-items:center;border:1px solid #ffffff20;border-radius:8px;padding:11px 13px;background:#ffffff06;cursor:pointer;transition:.16s}.level-card:hover{border-color:#e3b65b88;background:#e3b65b0d}.level-card:has(input:checked){border-color:var(--gold);background:#e3b65b12;box-shadow:inset 3px 0 var(--gold)}.level-card input{accent-color:var(--gold)}.level-card b{font-size:13px}.level-card small{display:block;color:#aab6bd;font-size:11px}.level-cost{color:var(--gold2);font-size:11px;white-space:nowrap}.topic-row{display:grid;grid-template-columns:1fr auto;gap:8px;margin-top:14px}.select{width:100%;padding:11px;border-radius:7px;background:#111e2a;color:#ecede8;border:1px solid #ffffff26}.progress-mini{display:flex;gap:18px;flex-wrap:wrap;color:#a9b3b9;font-size:11px;margin-top:21px}.progress-mini strong{color:var(--gold2)}.history-section{margin-top:22px}.history-section summary{cursor:pointer;color:#d4d8d3;font-size:13px}.history-list{display:grid;gap:6px;margin-top:10px}.history-row{display:flex;justify-content:space-between;gap:12px;padding:9px 11px;border:1px solid #ffffff15;border-radius:6px;color:#d0d6d5;font-size:12px}
+.err{margin:14px 0;padding:11px 14px;border:1px solid #d6837790;background:#582d2d70;border-radius:8px;color:#ffd6cf}.loading{color:var(--gold2);font-size:12px}
+/* Case desk */
+.case-view{padding:18px 0}.case-heading{display:flex;justify-content:space-between;align-items:flex-start;gap:18px;padding:20px 23px;margin:16px 0 15px;border:1px solid #c6a35e44;border-radius:10px;background:linear-gradient(110deg,#263749,#1a2938 65%,#2c332f);box-shadow:0 8px 25px #060c1380}.case-heading h1{font:30px/1.15 var(--serif);margin:3px 0 7px}.case-heading p{margin:0;color:#c5cecd;max-width:850px}.case-stamp{flex:none;border:1px solid #d6b46870;border-radius:6px;padding:7px 10px;color:var(--gold2);font-size:10px;letter-spacing:.13em;text-transform:uppercase}.desk-grid{display:grid;grid-template-columns:minmax(205px,.72fr) minmax(420px,1.65fr) minmax(245px,.8fr);gap:13px;align-items:stretch;min-height:590px}.rail,.work-surface{border:1px solid #ffffff1a;border-radius:10px;background:#172535d9;box-shadow:var(--shadow);overflow:hidden}.rail-head{padding:14px 15px;border-bottom:1px solid #ffffff14;background:#ffffff05}.rail-head h2{font:18px var(--serif);margin:2px 0}.rail-body{padding:12px}.rail-label{font-size:10px;text-transform:uppercase;letter-spacing:.16em;color:#9ba8b1;margin:5px 3px 9px}.index-row{display:flex;justify-content:space-between;gap:8px;padding:8px 9px;margin:4px 0;border-radius:6px;color:#c9d1d1;font-size:11px}.index-row.active{background:#d9ad5830;color:#f3dfac}.index-row .count{color:var(--gold2)}.mini-progress{height:4px;background:#ffffff18;border-radius:4px;margin:7px 3px 13px;overflow:hidden}.mini-progress i{display:block;height:100%;background:var(--gold);width:0;transition:width .25s}.objective{padding:10px;border-left:2px solid var(--gold);background:#ffffff06;border-radius:0 6px 6px 0;color:#c6d0d0;font-size:11px;margin:10px 0}.events{padding:0 15px}.news{padding:10px 12px;background:#4d4028;border:1px solid #bd974c66;border-radius:7px;color:#f0dfb5;font-size:12px;margin:8px 0}.work-surface{display:flex;flex-direction:column;background:linear-gradient(145deg,#26394a,#1a2a39 68%,#172431);position:relative}.work-surface:before{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at 50% 0,#e6bd6220,transparent 42%)}.tabs{position:relative;display:flex;gap:3px;padding:10px;border-bottom:1px solid #ffffff18;overflow-x:auto}.tab{white-space:nowrap;padding:9px 12px;background:transparent;border:0;border-radius:6px;color:#b6c1c5;font-size:12px}.tab:hover{background:#ffffff0c;color:#fff}.tab.active{background:#d8ad5b;color:#1a2530;font-weight:800}.work-content{position:relative;padding:15px;flex:1;min-width:0}.section-intro{font-size:12px;color:#b5c1c4;margin:0 0 12px}.doc-card,.tool-card{position:relative;border:1px solid #ceb68158;background:linear-gradient(110deg,#eee3ca,#e3d4b3);color:var(--ink);padding:12px 14px;margin:9px 0;border-radius:5px;box-shadow:0 4px 12px #090f1740}.doc-card:before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:#b99a5c}.doc-card h3,.tool-card h3{font-size:13px;margin:0 0 6px;color:#202b32}.doc-card p{margin:4px 0;color:#364148;font-size:13px}.doc-card pre{white-space:pre-wrap;overflow-wrap:anywhere;font:12px/1.65 var(--sans);margin:8px 0;color:#2f3d42}.doc-card button,.tool-card button{background:#203548;color:#f1e6cb;border:0;border-radius:5px;padding:7px 11px;font-size:11px;font-weight:700}.doc-card button:hover,.tool-card button:hover{background:#344f61}.doc-count{font-size:10px;color:#9a865f;margin-left:6px}.tag{display:inline-block;font-size:9px;border:1px solid #54462f48;border-radius:12px;padding:1px 7px;margin-left:6px;color:#66563b}.tools-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(195px,1fr));gap:8px}.tool-card{margin:0;min-height:128px}.tool-card pre{white-space:pre-wrap;font:12px/1.5 var(--sans);color:#38434a}.cost{display:inline-block;color:#785d28;font-size:11px;margin:8px 8px 0 0}.split-chat{display:grid;grid-template-columns:minmax(145px,.63fr) minmax(0,1.37fr);min-height:420px;border:1px solid #ffffff1e;border-radius:8px;overflow:hidden;background:#131f2b}.contact-list{border-right:1px solid #ffffff18;background:#172534}.contact-head{padding:12px 11px;color:#9faeb5;font-size:10px;letter-spacing:.12em;text-transform:uppercase;border-bottom:1px solid #ffffff14}.contact{width:100%;display:grid;grid-template-columns:35px 1fr;gap:8px;text-align:left;padding:10px 9px;background:transparent;border:0;border-bottom:1px solid #ffffff0c;color:#e5e8e4}.contact:hover{background:#ffffff0b}.contact.selected{background:#d9ad581b;box-shadow:inset 3px 0 var(--gold)}.avatar{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(145deg,#667a79,#354958);color:#f0dcaa;font:15px var(--serif);border:1px solid #d9c58d55}.contact-name{font-size:11px;font-weight:700;white-space:nowrap;text-overflow:ellipsis;overflow:hidden;padding-top:2px}.contact-last{display:block;font-size:9px;color:#98a7af;white-space:nowrap;text-overflow:ellipsis;overflow:hidden;margin-top:1px}.contact-state{font-size:9px;color:#d2b96e;margin-top:2px}.chat-pane{display:flex;flex-direction:column;min-width:0}.chat-top{padding:11px 13px;border-bottom:1px solid #ffffff14;display:flex;align-items:center;gap:10px}.chat-top b{font-size:12px}.chat-top small{display:block;color:#9eabb2;font-size:10px}.chatlog{height:290px;overflow:auto;padding:13px;background:radial-gradient(ellipse at 70% 0,#35455470,transparent 50%),#13202c;scroll-behavior:smooth}.msg{width:fit-content;max-width:86%;padding:9px 12px;border-radius:13px;margin:7px 0;white-space:pre-wrap;overflow-wrap:anywhere;font-size:12px;box-shadow:0 2px 5px #05090d30}.msg.me{background:#8dbbb0;color:#142326;margin-left:auto;border-bottom-right-radius:3px}.msg.them{background:#2b4051;color:#edf0e9;border-bottom-left-radius:3px}.msg.system{background:#3e3a2c;color:#ebdbaa;max-width:100%;font-size:11px}.msg-time{display:block;text-align:right;font-size:9px;opacity:.7;margin-top:4px}.chat-compose{display:flex;gap:7px;padding:10px;border-top:1px solid #ffffff14}.chat-compose input{min-width:0;flex:1;padding:9px 10px;border:1px solid #ffffff22;background:#0e1923;color:#f3f2e9;border-radius:6px}.send{background:var(--gold);color:#1b2731;border:0;border-radius:6px;padding:8px 12px;font-size:11px;font-weight:800}.chat-actions{display:flex;justify-content:space-between;align-items:center;padding:0 10px 10px;font-size:10px;color:#9aa8af}.chat-actions button{border:0;background:transparent;color:var(--gold2);font-size:11px;text-decoration:underline}.right-rail .contact{border-radius:6px;margin:4px 0}.neutral-note{font-size:11px;color:#aeb9bd;border:1px dashed #ffffff24;padding:10px;border-radius:7px}.relation-node{display:flex;align-items:center;gap:8px;padding:7px 0;color:#d8dfdd;font-size:11px}.relation-node:before{content:"";width:6px;height:6px;border:1px solid var(--gold2);border-radius:50%;box-shadow:0 0 0 4px #d9ad5815}.relation-line{border-left:1px dashed #b79d5c55;margin-left:3px;padding-left:14px}.textarea,.radio-list label,.option-label{width:100%;padding:10px;border-radius:6px;background:#f1e6cd;color:#29343a;border:1px solid #cbbb98}.textarea{resize:vertical}.radio-list{display:grid;gap:7px;margin:10px 0 17px}.radio-list label,.option-label{display:flex;align-items:flex-start;gap:8px;cursor:pointer;font-size:12px}.radio-list input,.option-label input{accent-color:#8d7039;margin-top:4px}.option-list{display:grid;gap:7px}.option-label:has(input:checked){border-color:#b58b3d;background:#f5e9c9;box-shadow:inset 3px 0 #bd9649}.decide-block{border-top:1px solid #ffffff17;padding-top:14px;margin-top:14px}.decide-block h3{font:18px var(--serif);margin:0 0 7px}.submit{margin-top:13px}.result{max-width:950px;margin:30px auto;background:#e9ddc1;color:#253138;border-radius:10px;padding:clamp(18px,4vw,38px);box-shadow:var(--shadow)}.result h2{font:26px var(--serif);margin:20px 0 8px}.result .doc-card{box-shadow:none}.stamp{display:inline-block;font:22px var(--serif);letter-spacing:.08em;border:3px double;padding:7px 13px;transform:rotate(-3deg);margin:8px 4px 14px}.stamp.scam{color:#a14d42}.stamp.legit{color:#427a65}.stamp.unclear{color:#8c6c2d}.result .panel{padding:14px;background:#f4ead4;border:1px solid #cbb98f;border-radius:7px;margin:8px 0}.result button{margin-top:12px}.empty{border:1px dashed #ffffff2b;border-radius:7px;padding:16px;color:#aeb9bd;font-size:12px;text-align:center}
+@media(max-width:1080px){.desk-grid{grid-template-columns:minmax(180px,.68fr) minmax(0,1.6fr)}.right-rail{grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr;align-items:start}.right-rail .rail-head{grid-column:1/-1}.right-rail .rail-body{min-width:0}.right-rail .rail-body+.rail-body{border-left:1px solid #ffffff16}}
+@media(max-width:720px){.shell{padding:0 14px 24px}.topbar{height:auto;min-height:68px;align-items:flex-start;padding:12px 0}.brand-sub{display:none}.hud{justify-content:flex-end;flex-wrap:wrap}.hud-item{padding:5px 7px;font-size:10px}.hud-item:nth-child(3){display:none}.menu{grid-template-columns:1fr;gap:20px;padding:22px 0}.room{height:48vw;min-height:260px;max-height:350px;order:2}.menu-copy{order:1}.menu-copy h1{font-size:48px}.progress-mini{margin-top:13px}.case-heading{padding:15px;display:block}.case-heading h1{font-size:25px}.case-stamp{display:inline-block;margin-top:12px}.desk-grid{grid-template-columns:1fr;min-height:0}.left-rail{display:grid;grid-template-columns:1fr 1fr}.left-rail .rail-head{grid-column:1/-1}.left-rail .rail-body+.rail-body{border-left:1px solid #ffffff16}.work-surface{min-height:520px}.right-rail{grid-column:auto}.work-content{padding:11px}.tabs{padding:7px}.tab{padding:9px 10px}.split-chat{grid-template-columns:1fr;min-height:0}.contact-list{display:flex;overflow:auto;border-right:0;border-bottom:1px solid #ffffff18}.contact-head{display:none}.contact{flex:none;width:140px;border-bottom:0}.contact.selected{box-shadow:inset 0 -3px var(--gold)}.chatlog{height:290px}.chat-compose{position:sticky;bottom:0;background:#13202c}.result{margin:20px 0}.history-row{font-size:10px}}
+@media(max-width:420px){.brand-name{font-size:15px}.brand-mark{width:36px;height:36px}.hud-item{font-size:9px}.menu-copy h1{font-size:42px}.level-card{grid-template-columns:18px 1fr}.level-cost{grid-column:2}.topic-row{grid-template-columns:1fr}.left-rail,.right-rail{display:block}.left-rail .rail-body+.rail-body,.right-rail .rail-body+.rail-body{border-left:0;border-top:1px solid #ffffff16}.case-heading p{font-size:12px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}}
+</style></head>
+<body><main class="shell">
+<header class="topbar"><div class="brand"><div class="brand-mark" aria-hidden="true">TT</div><div><div class="brand-name">Thám tử không gian mạng</div><div class="brand-sub">Click tỉnh táo · Hồ sơ điều tra</div></div></div><div class="hud" aria-label="Tiến trình thám tử"><div class="hud-item"><small>Ví điều tra</small><strong id="sCoin">Xu 100</strong></div><div class="hud-item"><small>Hồ sơ đã khép</small><strong id="sSolved">0</strong></div><div class="hud-item"><small>Bộ thủ đoạn</small><strong id="sCards">0 thẻ</strong></div><button class="icon-button" id="bHome" type="button" title="Về phòng điều tra" aria-label="Về phòng điều tra">⌂</button></div></header>
+<div id="err" class="err hide" role="alert" aria-live="assertive"></div>
+<section id="vStart" class="view menu">
+ <div class="room" aria-label="Minh họa phòng điều tra"><div class="window"></div><div class="window-light"></div><div class="shelf"></div><div class="desk"></div><div class="desk-top"></div><div class="lamp"><i class="lamp-base"></i></div><div class="paper-stack"></div><div class="mug"></div><div class="room-caption">Phòng 09 · hồ sơ luôn mở</div></div>
+ <div class="menu-copy"><div class="eyebrow">Phòng điều tra số 09</div><h1 class="serif">Mọi dấu vết<br><span>đều có câu chuyện.</span></h1><p>Đọc hồ sơ, hỏi từng người, đối chiếu những gì họ nói. Sự thật chỉ hiện ra khi bạn tự nối các mảnh ghép.</p>
+  <div class="eyebrow">Chọn cấp độ điều tra</div><div class="level-picker" id="levels"></div>
+  <div class="topic-row"><select class="select" id="topic" aria-label="Loại vụ án"></select><button class="primary" id="bNew" type="button">Mở hồ sơ mới</button></div><p id="busy" class="loading hide" role="status">Đang chuẩn bị hồ sơ với AI…</p>
+  <div class="progress-mini"><span>Điều tra viên <strong id="rank">Tập sự</strong></span><span>Vụ đã giải <strong id="miniSolved">0</strong></span><span>Xu <strong id="miniCoin">100</strong></span></div>
+  <details class="history-section"><summary>Hồ sơ đã khép <span id="historyCount"></span></summary><div id="hist" class="history-list"></div></details>
+  <p class="mut" style="font-size:10px;margin-top:15px">Nhân vật, đường dẫn và dữ liệu trong trò chơi đều là giả. Không nhập thông tin cá nhân thật.</p>
  </div>
 </section>
-
-<section id="vRes" class="hide"></section>
-
+<section id="vCase" class="view case-view hide">
+ <div class="case-heading"><div><div class="eyebrow">Hồ sơ đang điều tra · <span id="caseLevel"></span></div><h1 class="serif" id="cTitle"></h1><p id="cIntro"></p></div><div class="case-stamp">ĐANG MỞ</div></div>
+ <div class="events" id="ev" aria-live="polite"></div>
+ <div class="desk-grid">
+  <aside class="rail left-rail"><div class="rail-head"><div class="eyebrow">Sổ tay</div><h2>Hồ sơ vụ việc</h2></div><div class="rail-body"><div class="rail-label">Thu thập được</div><div class="index-row"><span>◆ Tài liệu đã đọc</span><span class="count" id="docProgress">0 / 0</span></div><div class="mini-progress"><i id="docBar"></i></div><div class="index-row"><span>◌ Công cụ đã dùng</span><span class="count" id="toolProgress">0 / 0</span></div><div class="mini-progress"><i id="toolBar"></i></div><div class="index-row"><span>◉ Nhân vật đã hỏi</span><span class="count" id="talkProgress">0 / 0</span></div><div class="mini-progress"><i id="talkBar"></i></div></div><div class="rail-body"><div class="rail-label">Mục tiêu hiện tại</div><div class="objective">Đọc tài liệu rồi đối chiếu lời khai và kết quả xác minh trước khi kết luận.</div><div class="rail-label">Phân loại trung lập</div><div class="index-row">Chưa đủ dữ kiện <span>○</span></div><div class="index-row">Cần đối chiếu <span>◇</span></div><div class="index-row">Đã ghi nhận <span>◆</span></div><p class="mut" style="font-size:10px">Biểu tượng theo dõi tiến trình, không đánh giá nhân vật.</p></div></aside>
+  <section class="work-surface"><nav class="tabs" aria-label="Khu vực điều tra"><button class="tab active" data-t="docs">Hồ sơ</button><button class="tab" data-t="tools">Xác minh</button><button class="tab" data-t="talk">Tin nhắn</button><button class="tab" data-t="decide">Kết luận</button></nav><div class="work-content"><div id="tdocs"></div><div id="ttools" class="hide"></div><div id="ttalk" class="hide"><div id="chat"></div></div><div id="tdecide" class="hide"><div class="eyebrow">Bản ghi của điều tra viên</div><div class="decide-block" style="border:0;margin-top:0;padding-top:5px"><h3>Giả thuyết</h3><p class="section-intro">Ghi lại suy luận của bạn; phần này sẽ xuất hiện trong tổng kết.</p><textarea class="textarea" id="theory" rows="3" maxlength="500" placeholder="Những dữ kiện nào đang khớp hoặc mâu thuẫn?"></textarea></div><div class="decide-block"><h3>Bạn nhận định tình huống này là gì?</h3><div class="radio-list"><label><input type="radio" name="vd" value="scam"> Lừa đảo có chủ đích</label><label><input type="radio" name="vd" value="legit"> Hợp pháp, có thể có sơ suất</label><label><input type="radio" name="vd" value="unclear"> Chưa đủ bằng chứng để kết luận</label></div></div><div class="decide-block"><h3>Hướng xử lý</h3><div id="opts" class="option-list"></div><button class="primary submit" id="bSubmit">Khép hồ sơ</button></div></div></div></section>
+  <aside class="rail right-rail"><div class="rail-head"><div class="eyebrow">Mạng lưới liên quan</div><h2>Liên hệ trong hồ sơ</h2></div><div class="rail-body"><div id="contacts"></div></div><div class="rail-body"><div class="rail-label">Quan hệ & thông tin</div><div id="relations" class="relation-line"></div><p class="neutral-note">Chỉ ghi nhận dữ liệu có trong hồ sơ. Quan hệ chưa rõ sẽ để ngỏ; giao diện không suy đoán ai đáng tin.</p><div class="rail-label" style="margin-top:16px">Ghi chú</div><p class="mut" style="font-size:11px">Vai trò chi tiết được mở trong tổng kết sau khi bạn nộp kết luận.</p></div></aside>
+ </div>
+</section>
+<section id="vRes" class="view hide result"></section>
+</main>
 <script>
-const API = "https://thamtumang.ng-huynhmquan-09.workers.dev"; // dán URL Worker mới, không có dấu / ở cuối
-const LV = [["Tập sự","Có hướng dẫn, dấu hiệu khá rõ.",0],["Điều tra viên","Manh mối rải rác, phải đối chiếu.",20],["Thám tử chuyên nghiệp","Bề mặt rất hợp lý, nhiều lớp.",40]];
+const API = "https://thamtumang.ng-huynhmquan-09.workers.dev";
+const LV = [["Tập sự","Có hướng dẫn, dấu hiệu khá rõ.",0],["Điều tra viên","Manh mối rải rác, phải đối chiếu.",20],["Thám tử chuyên nghiệp","Bề mặt hợp lý, nhiều lớp thông tin.",40]];
 const TOPICS = ["Ngẫu nhiên","Tuyển dụng, việc nhẹ lương cao","Trúng thưởng, hoàn tiền giả","Giả danh ngân hàng, tổ chức tài chính","Chiếm đoạt tài khoản mạng xã hội","Mua bán trực tuyến, biên lai giả","Mạo danh người thân, bạn bè, giáo viên","Học bổng, tuyển sinh","Hỗ trợ kỹ thuật, chăm sóc khách hàng giả","Hội nhóm, hoạt động cộng đồng","Giả mạo danh tính, hồ sơ, giấy tờ","QR code, trang đăng nhập giả","Kết hợp nhiều thủ đoạn"];
-const $ = id => document.getElementById(id);
-function el(tag, props = {}, ...kids){const e=document.createElement(tag);for(const k in props){if(k==="class")e.className=props[k];else if(k.startsWith("on"))e[k]=props[k];else e.setAttribute(k,props[k]);}for(const c of kids)e.append(c);return e;}
-let S = {coins:100,solved:0,history:[],cards:[]}, level = 1, acts = 0, used = new Set(), shownEv = new Set(), C = null, seen = new Set(), asked = 0, hist = [], hints = 0, busy = false;
-try { S = Object.assign(S, JSON.parse(localStorage.getItem("ttkgm") || "{}")); } catch {}
-const save = () => { try { localStorage.setItem("ttkgm", JSON.stringify(S)); } catch {} stats(); };
-function stats(){ $("sCoin").textContent = "🪙 Xu: " + S.coins; $("sSolved").textContent = "✅ Đã giải: " + S.solved + "   🃏 Thẻ: " + S.cards.length; }
-function showErr(m){ $("err").textContent = m; $("err").classList.toggle("hide", !m); }
-function view(v){ ["vStart","vCase","vRes"].forEach(x => $(x).classList.toggle("hide", x !== v)); scrollTo(0,0); }
+const $=id=>document.getElementById(id);
+function el(tag,props={},...kids){const e=document.createElement(tag);for(const k in props){if(k==="class")e.className=props[k];else if(k.startsWith("on"))e[k]=props[k];else e.setAttribute(k,props[k]);}for(const c of kids)if(c!==null&&c!==undefined)e.append(typeof c==="string"?document.createTextNode(c):c);return e;}
+let S={coins:100,solved:0,history:[],cards:[]},level=1,acts=0,used=new Set(),shownEv=new Set(),C=null,seen=new Set(),asked=0,hints=0,busy=false,selectedCharacter=null,chatHistories={},lastMessages={},askedCharacters=new Set();
+try{S=Object.assign(S,JSON.parse(localStorage.getItem("ttkgm")||"{}"));}catch{}
+const save=()=>{try{localStorage.setItem("ttkgm",JSON.stringify(S));}catch{}stats();};
+function stats(){ $("sCoin").textContent="🪙 "+S.coins;$("sSolved").textContent=String(S.solved);$("sCards").textContent=S.cards.length+" thẻ";$("miniSolved").textContent=S.solved;$("miniCoin").textContent=S.coins;$('rank').textContent=S.solved>=10?"Điều tra viên":S.solved>=4?"Tập sự nâng cao":"Tập sự";$("historyCount").textContent="· "+S.history.length;}
+function showErr(m){$("err").textContent=m;$("err").classList.toggle("hide",!m);}
+function view(v){["vStart","vCase","vRes"].forEach(x=>$(x).classList.toggle("hide",x!==v));scrollTo({top:0,behavior:"smooth"});}
+async function call(path,body){for(let i=0;;i++){try{return await call1(path,body);}catch(e){if(i<3&&/vị trí của máy chủ/.test(e.message))continue;throw e;}}}
+async function call1(path,body){const ac=new AbortController(),t=setTimeout(()=>ac.abort(),60000);try{const r=await fetch(API+path,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body),signal:ac.signal});const d=await r.json().catch(()=>({}));if(!r.ok)throw new Error(d.error||"Máy chủ trả mã lỗi "+r.status);return d;}catch(e){if(e.name==="AbortError")throw new Error("Chờ quá lâu (60 giây). Hãy thử lại.");if(e instanceof TypeError)throw new Error("Không kết nối được tới máy chủ AI. Kiểm tra địa chỉ Worker trong index.html (hiện: "+API+").");throw e;}finally{clearTimeout(t);}}
+function initStart(){LV.forEach((l,i)=>{const r=el("input",{type:"radio",name:"lv",value:i+1});if(!i)r.checked=true;r.onchange=()=>{level=i+1;refreshBtn();};$("levels").append(el("label",{class:"level-card"},r,el("span",{},el("b",{},["Tập sự","Điều tra viên","Thám tử chuyên nghiệp"][i]),el("small",{},l[1])),el("span",{class:"level-cost"},l[2]?"−"+l[2]+" xu":"Miễn phí")));});TOPICS.forEach(t=>$("topic").append(el("option",{value:t},t)));$("bNew").onclick=newCase;$("bHome").onclick=()=>{showErr("");renderHist();view("vStart");};renderHist();stats();}
+function refreshBtn(){$("bNew").textContent="Mở hồ sơ mới"+(LV[level-1][2]?" · −"+LV[level-1][2]+" xu":"");}
+function renderHist(){const h=$("hist");h.replaceChildren();if(!S.history.length){h.append(el("p",{class:"mut"},"Chưa có vụ nào được khép."));return;}S.history.slice(-8).reverse().forEach(x=>h.append(el("div",{class:"history-row"},el("span",{},x.title),el("span",{},(x.rating||"Đã giải")+" · "+x.score+"/100 · "+(LV[(x.level||1)-1]?.[0]||"")))));}
+async function newCase(){if(busy)return;const cost=LV[level-1][2];if(S.coins<cost){showErr("Không đủ xu. Hãy chọn cấp thấp hơn hoặc giải thêm vụ án.");return;}showErr("");busy=true;$("bNew").disabled=true;$("busy").classList.remove("hide");try{const topic=$("topic").value;const d=await call("/api/case",{level,topic:topic==="Ngẫu nhiên"?"":topic,recent:S.history.map(h=>h.title)});S.coins-=cost;save();C=d.case;seen=new Set();asked=0;hints=0;acts=0;used=new Set();shownEv=new Set();chatHistories={};lastMessages={};askedCharacters=new Set();selectedCharacter=C.characters[0]?.id||null;$("ev").replaceChildren();$("cTitle").textContent=C.title;$("cIntro").textContent=C.intro;$("caseLevel").textContent=LV[level-1][0];$("theory").value="";document.querySelectorAll('input[name="vd"]').forEach(r=>r.checked=false);renderDocs();renderTools();renderTalk();renderOpts();tab("docs");updateProgress();view("vCase");}catch(e){showErr("Không tạo được vụ án: "+e.message);}finally{busy=false;$("bNew").disabled=false;$("busy").classList.add("hide");}}
+function tab(t){document.querySelectorAll(".tab").forEach(b=>b.classList.toggle("active",b.dataset.t===t));["docs","tools","talk","decide"].forEach(x=>$('t'+x).classList.toggle("hide",x!==t));if(t==="talk")renderTalk();}
+document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>tab(b.dataset.t));
+function updateProgress(){if(!C)return;const pct=(a,b)=>b?Math.round(a/b*100)+"%":"0%";$("docProgress").textContent=seen.size+" / "+C.docs.length;$("docBar").style.width=pct(seen.size,C.docs.length);$("toolProgress").textContent=used.size+" / "+C.tools.length;$("toolBar").style.width=pct(used.size,C.tools.length);$("talkProgress").textContent=askedCharacters.size+" / "+C.characters.length;$("talkBar").style.width=pct(askedCharacters.size,C.characters.length);}
+function renderDocs(){const box=$("tdocs");box.replaceChildren(el("p",{class:"section-intro"},"Tài liệu trong hồ sơ. Mở từng trang và tự đối chiếu; chi tiết lạ chưa phải kết luận."));C.docs.forEach(d=>{const open=seen.has(d.id),card=el("article",{class:"doc-card"},el("h3",{},d.title,el("span",{class:"doc-count"},open?"ĐÃ ĐỌC":"CHƯA MỞ")));if(open)card.append(el("pre",{},d.text));else card.append(el("button",{type:"button",onclick:()=>{seen.add(d.id);renderDocs();updateProgress();act();}},"Mở tài liệu"));box.append(card);});}
+function act(){acts++;(C.events||[]).forEach((e,i)=>{if(!shownEv.has(i)&&e.after<=acts){shownEv.add(i);$("ev").append(el("div",{class:"news"},el("b",{},"Cập nhật hồ sơ"+(e.from?" · "+e.from:"")+": "),e.text));}});}
+function renderTools(){const box=$("ttools");box.replaceChildren(el("p",{class:"section-intro"},"Công cụ mô phỏng tốn xu. Kết quả là một nguồn cần đặt cạnh tài liệu và lời khai."));const grid=el("div",{class:"tools-grid"});C.tools.forEach(t=>{const u=used.has(t.id),card=el("article",{class:"tool-card"},el("h3",{},t.name));if(u)card.append(el("pre",{},t.result),el("span",{class:"cost"},"Đã kiểm tra"));else card.append(el("p",{class:"mut",style:"font-size:11px"},"Tra cứu dữ liệu trong hồ sơ."),el("span",{class:"cost"},"Chi phí · "+t.cost+" xu"),el("button",{type:"button",onclick:()=>{if(S.coins<t.cost){showErr("Không đủ xu để dùng công cụ này.");return;}showErr("");S.coins-=t.cost;save();used.add(t.id);renderTools();updateProgress();act();}},"Chạy xác minh"));grid.append(card);});box.append(grid);}
+function renderContacts(){const box=$("contacts"),rel=$("relations");box.replaceChildren();rel.replaceChildren();C.characters.forEach((c,i)=>{const active=selectedCharacter===c.id,initial=(c.name||"?").trim().charAt(0).toUpperCase(),hist=chatHistories[c.id]||[],last=lastMessages[c.id]||(hist.length?hist[hist.length-1].text:"Chưa có tin nhắn"),button=el("button",{class:"contact"+(active?" selected":""),type:"button",onclick:()=>selectCharacter(c.id)},el("span",{class:"avatar","aria-hidden":"true"},initial),el("span",{},el("span",{class:"contact-name"},c.name),el("span",{class:"contact-last"},last),el("span",{class:"contact-state"},askedCharacters.has(c.id)?"Đã trao đổi":"Chưa thẩm vấn")));box.append(button);const node=el("div",{class:"relation-node"},c.name);rel.append(node);});}
+function renderTalk(){if(!C)return;const wrapper=el("div",{class:"split-chat"}),list=el("div",{class:"contact-list"},el("div",{class:"contact-head"},"Hộp thư hồ sơ")),pane=el("div",{class:"chat-pane"});C.characters.forEach(c=>{const selected=c.id===selectedCharacter,hist=chatHistories[c.id]||[],last=lastMessages[c.id]||(hist.length?hist[hist.length-1].text:"Chưa có tin nhắn"),button=el("button",{class:"contact"+(selected?" selected":""),type:"button",onclick:()=>selectCharacter(c.id)},el("span",{class:"avatar","aria-hidden":"true"},(c.name||"?").trim().charAt(0).toUpperCase()),el("span",{},el("span",{class:"contact-name"},c.name),el("span",{class:"contact-last"},last),el("span",{class:"contact-state"},askedCharacters.has(c.id)?"Đã thẩm vấn":"Chưa thẩm vấn")));list.append(button);});const c=C.characters.find(x=>x.id===selectedCharacter)||C.characters[0];if(c){pane.append(el("div",{class:"chat-top"},el("span",{class:"avatar"},c.name.trim().charAt(0).toUpperCase()),el("div",{},el("b",{},c.name),el("small",{},"Cuộc trò chuyện riêng · nội dung chưa được xác minh"))));const log=el("div",{class:"chatlog",id:"chatlog","aria-live":"polite"});(chatHistories[c.id]||[]).forEach(m=>log.append(bubbleNode(m.role,m.text,m.time)));pane.append(log);const form=el("form",{class:"chat-compose",onsubmit:e=>{e.preventDefault();ask();}},el("input",{type:"text",id:"q",maxlength:"300",placeholder:"Nhập câu hỏi bằng tiếng Việt…","aria-label":"Câu hỏi cho nhân vật"}),el("button",{class:"send",type:"submit",id:"bAsk"},"Gửi"));pane.append(form,el("div",{class:"chat-actions"},el("span",{},"Câu hỏi tự do · tối đa 300 ký tự"),el("button",{type:"button",id:"bHint",onclick:hint},"Xin gợi ý · −10 xu")));}wrapper.append(list,pane);$("chat").replaceChildren(wrapper);renderContacts();}
+function bubbleNode(role,text,time){const cls=role==="user"?"me":role==="system"?"system":"them",b=el("div",{class:"msg "+cls},text);if(time)b.append(el("span",{class:"msg-time"},time));return b;}
+function selectCharacter(id){selectedCharacter=id;renderTalk();const q=$("q");if(q)q.focus();}
+function pushMessage(id,role,text){const t=new Date().toLocaleTimeString("vi-VN",{hour:"2-digit",minute:"2-digit"});chatHistories[id]??=[];chatHistories[id].push({role,text,time:t});lastMessages[id]=text;}
+async function ask(){const q=$("q")?.value.trim(),id=selectedCharacter;if(!q||busy||!id)return;busy=true;showErr("");pushMessage(id,"user",q);renderTalk();const log=$("chatlog"),wait=el("div",{class:"msg them mut"},"Đang chờ phản hồi…");log.append(wait);log.scrollTop=log.scrollHeight;try{const prior=chatHistories[id].slice(0,-1).filter(m=>m.role!=="system").map(m=>({role:m.role,text:m.text}));const d=await call("/api/chat",{case:C,characterId:id,message:q,history:prior});wait.remove();pushMessage(id,"ai",d.reply);askedCharacters.add(id);asked++;act();}catch(e){wait.remove();pushMessage(id,"system","Tin nhắn đã gửi nhưng chưa nhận được phản hồi. "+e.message);showErr("Không hỏi được: "+e.message);}finally{busy=false;renderTalk();updateProgress();if($("q"))$("q").focus();}}
+async function hint(){if(busy)return;if(S.coins<10){showErr("Không đủ xu để xin gợi ý.");return;}busy=true;showErr("");const id=selectedCharacter||C.characters[0].id;try{const d=await call("/api/chat",{case:C,characterId:id,mode:"hint",history:(chatHistories[id]||[]).filter(m=>m.role!=="system").map(m=>({role:m.role,text:m.text}))});S.coins-=10;hints++;save();pushMessage(id,"system","Gợi ý · "+d.reply);renderTalk();}catch(e){showErr("Không lấy được gợi ý: "+e.message);}finally{busy=false;}}
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function renderOpts(){const box=$("opts");box.replaceChildren();shuffle(C.options).forEach(o=>box.append(el("label",{class:"option-label"},el("input",{type:"radio",name:"opt",value:o.id}),el("span",{},o.text))));$("bSubmit").onclick=submit;}
+function submit(){const pick=document.querySelector('input[name="opt"]:checked'),vd=document.querySelector('input[name="vd"]:checked');if(!pick||!vd){showErr("Hãy chọn cả kết luận về tình huống và hướng xử lý trước khi nộp.");return;}showErr("");const vOK=vd.value===C.truth.verdict,o=C.options.find(x=>x.id===pick.value),best=C.options.reduce((a,b)=>b.score>a.score?b:a);const strongSeen=C.docs.filter(d=>d.weight==="strong"&&seen.has(d.id)).length;const keyUsed=C.tools.filter(t=>t.key&&used.has(t.id)).length;const score=Math.max(0,Math.min(100,Math.round(o.score*.5+(vOK?35:0)+Math.min(strongSeen,3)*5+Math.min(keyUsed,2)*5+Math.min(asked,3)*1.7)));const coins=Math.round(o.score/2)+(vOK?20:-25)+(o.score<40?-15:0)+strongSeen*5+keyUsed*8+Math.min(asked,5)*2;const rating=score>=85?"Thám tử xuất sắc":score>=65?"Điều tra viên vững":score>=40?"Cần đối chiếu kỹ hơn":"Còn dễ bị đánh lừa";if(score>=50)(C.tactics||[]).forEach(t=>{if(!S.cards.includes(t.name))S.cards.push(t.name);});S.coins=Math.max(0,S.coins+coins);S.solved++;S.history.push({title:C.title,level,score,rating});save();renderRes(o,best,score,coins,rating,vd.value,vOK);}
+const NAMES={scam:"Lừa đảo",legit:"Hợp pháp",unclear:"Chưa đủ bằng chứng"};
+function renderRes(o,best,score,coins,rating,pv,vOK){const r=$("vRes");r.replaceChildren();const V={scam:"Đây là lừa đảo có chủ đích.",legit:"Tình huống này thực chất hợp pháp.",unclear:"Chưa đủ bằng chứng để kết luận."}[C.truth.verdict]||"";r.append(el("div",{class:"eyebrow"},"Hồ sơ đã khép"),el("h1",{class:"serif"},C.title),el("div",{class:"stamp "+C.truth.verdict},{scam:"LỪA ĐẢO",legit:"HỢP PHÁP",unclear:"CHƯA RÕ"}[C.truth.verdict]||""),el("div",{class:"panel"},el("b",{},rating+" — "+score+"/100"),el("br"),(coins>=0?"Bạn nhận +":"Bạn mất ")+Math.abs(coins)+" xu. Điểm gồm lựa chọn, kết luận, tài liệu đã đọc, công cụ và câu hỏi."+(vOK?"":" Kết luận sai bị trừ 25 xu.")+(o.score<40?" Hướng xử lý rủi ro bị trừ 15 xu.":"")),el("h2",{},"Sự thật nền"),el("div",{class:"panel"},el("b",{},V+" "),C.truth.summary,el("br"),el("span",{class:"mut"},"Kết luận của bạn: "+NAMES[pv]+(vOK?" — đúng.":" — chưa đúng."))));const th=$("theory").value.trim();if(th)r.append(el("p",{},el("b",{},"Giả thuyết của bạn: "),th));r.append(el("h2",{},"Hướng xử lý đã chọn"),el("div",{class:"panel"},o.text,el("br"),el("span",{class:"mut"},o.why)));if(best.id!==o.id)r.append(el("div",{class:"panel"},el("b",{},"Hướng có điểm cao nhất: "),best.text,el("br"),el("span",{class:"mut"},best.why)));r.append(el("h2",{},"Những gì mỗi tài liệu cho biết"));const names={strong:"bằng chứng mạnh",weak:"gián tiếp",noise:"gây nhiễu",neutral:"trung tính"};C.docs.forEach(d=>r.append(el("article",{class:"doc-card"},el("h3",{},d.title,el("span",{class:"tag"},names[d.weight]||d.weight),seen.has(d.id)?"":el("span",{class:"doc-count"},"chưa mở")),el("p",{},d.meaning))));if(C.characters.length){r.append(el("h2",{},"Nhân vật trong hồ sơ"));C.characters.forEach(c=>r.append(el("div",{class:"panel"},el("b",{},c.name),c.role?" · "+c.role:"",el("p",{},c.persona))));}if(C.future){const good=o.score>=60;r.append(el("h2",{},"Ba ngày sau"),el("div",{class:"panel"},el("b",{},good?"Theo hướng bạn chọn: ":"Theo hướng bạn chọn (chưa tốt): "),good?C.future.right:C.future.wrong,el("br"),el("span",{class:"mut"},"Nếu làm ngược lại: "+(good?C.future.wrong:C.future.right))));}if((C.tactics||[]).length)r.append(el("h2",{},"Thẻ thủ đoạn"),...C.tactics.map(t=>el("article",{class:"doc-card"},el("h3",{},t.name),el("p",{},t.desc))),el("p",{class:"mut"},score>=50?"Đã thêm vào bộ sưu tập.":"Cần từ 50 điểm để nhận thẻ."));r.append(el("h2",{},"Ghi nhớ khi gặp tình huống tương tự"),el("ul",{},...C.tips.map(t=>el("li",{},t))),el("button",{class:"primary",onclick:()=>{renderHist();view("vStart");}},"Trở về phòng điều tra"));view("vRes");}
+initStart();refreshBtn();
+</script></body></html>
 
-async function call(path, body){
-  for(let i=0;;i++){
-    try{ return await call1(path, body); }
-    catch(e){ if(i < 3 && /vị trí của máy chủ/.test(e.message)) continue; throw e; }
-  }
-}
-async function call1(path, body){
-  const ac = new AbortController(), t = setTimeout(() => ac.abort(), 60000);
-  try{
-    const r = await fetch(API + path, {method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify(body), signal:ac.signal});
-    const d = await r.json().catch(() => ({}));
-    if(!r.ok) throw new Error(d.error || "Máy chủ trả mã lỗi " + r.status);
-    return d;
-  }catch(e){
-    if(e.name === "AbortError") throw new Error("Chờ quá lâu (60 giây). Hãy thử lại.");
-    if(e instanceof TypeError) throw new Error("Không kết nối được tới máy chủ AI. Kiểm tra địa chỉ Worker trong index.html (hiện: " + API + ").");
-    throw e;
-  }finally{ clearTimeout(t); }
-}
 
-function initStart(){
-  const box = $("levels");
-  LV.forEach((l,i) => { const r = el("input",{type:"radio",name:"lv",value:i+1}); if(i===0) r.checked = true; r.onchange = () => level = i+1;
-    box.append(el("label",{}, r, " ", el("b",{}, ["🔰","🔍","🕵️"][i] + " " + l[0]), el("br"), el("span",{class:"mut"}, l[1] + (l[2] ? " (−" + l[2] + " xu)" : " (miễn phí)")))); });
-  TOPICS.forEach(t => $("topic").append(el("option",{}, t)));
-  $("bNew").onclick = newCase; refreshBtn(); renderHist(); stats();
-}
-function refreshBtn(){ $("bNew").textContent = "📂 Mở hồ sơ mới" + (LV[level-1][2] ? " (−" + LV[level-1][2] + " xu)" : ""); }
-document.addEventListener("change", e => { if(e.target.name === "lv") refreshBtn(); });
-function renderHist(){
-  const h = $("hist"); h.replaceChildren();
-  if(!S.history.length){ h.append(el("p",{class:"mut"},"Chưa có vụ nào. Mở hồ sơ đầu tiên để bắt đầu.")); return; }
-  S.history.slice(-8).reverse().forEach(x => h.append(el("div",{class:"doc"}, el("b",{}, x.title), " — " + x.rating + " (" + x.score + "/100, " + LV[x.level-1][0] + ")")));
-}
 
-async function newCase(){
-  if(busy) return; const cost = LV[level-1][2];
-  if(S.coins < cost){ showErr("Không đủ xu. Hãy chọn cấp thấp hơn hoặc giải thêm vụ án."); return; }
-  showErr(""); busy = true; $("bNew").disabled = true; $("busy").classList.remove("hide");
-  try{
-    const topic = $("topic").value;
-    const d = await call("/api/case", {level, topic: topic === "Ngẫu nhiên" ? "" : topic, recent: S.history.map(h => h.title)});
-    S.coins -= cost; save(); C = d.case; seen = new Set(); asked = 0; hist = []; hints = 0; acts = 0; used = new Set(); shownEv = new Set(); $("ev").replaceChildren();
-    $("cTitle").textContent = C.title; $("cIntro").textContent = C.intro; $("theory").value = ""; document.querySelectorAll("input[name=vd]").forEach(r => r.checked = false);
-    renderDocs(); renderTools(); renderTalk(); renderOpts(); tab("docs"); view("vCase");
-  }catch(e){ showErr("Không tạo được vụ án: " + e.message); }
-  finally{ busy = false; $("bNew").disabled = false; $("busy").classList.add("hide"); }
-}
-
-function tab(t){ document.querySelectorAll(".tabs button").forEach(b => b.classList.toggle("alt", b.dataset.t !== t)); ["docs","tools","talk","decide"].forEach(x => $("t"+x).classList.toggle("hide", x !== t)); }
-document.querySelectorAll(".tabs button").forEach(b => b.onclick = () => tab(b.dataset.t));
-
-function renderDocs(){
-  const box = $("tdocs"); box.replaceChildren(el("p",{class:"mut"},"Mở từng tài liệu để đọc. Không phải chi tiết lạ nào cũng chứng minh được điều gì."));
-  C.docs.forEach(d => { const open = seen.has(d.id);
-    const card = el("div",{class:"doc"}, el("h3",{}, d.title));
-    if(open) card.append(el("pre",{}, d.text)); else card.append(el("button",{class:"alt",onclick:() => { seen.add(d.id); renderDocs(); act(); }}, "Xem tài liệu"));
-    box.append(card); });
-}
-function act(){
-  acts++;
-  (C.events || []).forEach((e, i) => { if(!shownEv.has(i) && e.after <= acts){ shownEv.add(i); $("ev").append(el("div",{class:"news"}, el("b",{}, "Tin mới" + (e.from ? " từ " + e.from : "") + ": "), e.text)); } });
-}
-function renderTools(){
-  const box = $("ttools"); box.replaceChildren(el("p",{class:"mut"},"Mỗi công cụ tốn xu nhưng có thể cho thông tin quyết định. Kết quả đôi khi chưa rõ ràng."));
-  C.tools.forEach(t => { const u = used.has(t.id);
-    const card = el("div",{class:"doc"}, el("h3",{}, t.name));
-    if(u) card.append(el("pre",{}, t.result)); else card.append(el("button",{class:"alt",onclick:() => { if(S.coins < t.cost){ showErr("Không đủ xu để dùng công cụ này."); return; } showErr(""); S.coins -= t.cost; save(); used.add(t.id); renderTools(); act(); }}, "Dùng (−" + t.cost + " xu)"));
-    box.append(card); });
-}
-function renderTalk(){
-  const w = $("who"); w.replaceChildren(); C.characters.forEach(c => w.append(el("option",{value:c.id}, c.name + " — " + c.role)));
-  $("chat").replaceChildren(); $("bAsk").onclick = ask; $("bHint").onclick = hint; $("q").onkeydown = e => { if(e.key === "Enter") ask(); };
-}
-function bubble(cls, text){ const b = el("div",{class:"msg " + cls}, text); $("chat").append(b); $("chat").scrollTop = 1e9; return b; }
-async function ask(){
-  const q = $("q").value.trim(); if(!q || busy) return; busy = true; $("bAsk").disabled = true; showErr("");
-  bubble("me", q); $("q").value = ""; const wait = bubble("them mut", "…");
-  try{
-    const d = await call("/api/chat", {case:C, characterId:$("who").value, message:q, history:hist});
-    hist.push({role:"user",text:q},{role:"ai",text:d.reply}); asked++; act(); wait.className = "msg them"; wait.textContent = d.reply;
-  }catch(e){ wait.remove(); showErr("Không hỏi được: " + e.message); }
-  finally{ busy = false; $("bAsk").disabled = false; }
-}
-async function hint(){
-  if(busy) return; if(S.coins < 10){ showErr("Không đủ xu để xin gợi ý."); return; } busy = true; showErr("");
-  try{ const d = await call("/api/chat", {case:C, characterId:C.characters[0].id, mode:"hint", history:hist}); S.coins -= 10; hints++; save(); bubble("them", "Gợi ý: " + d.reply); }
-  catch(e){ showErr("Không lấy được gợi ý: " + e.message); } finally{ busy = false; }
-}
-
-function shuffle(a){ a = a.slice(); for(let i=a.length-1;i>0;i--){ const j = Math.floor(Math.random()*(i+1)); [a[i],a[j]] = [a[j],a[i]]; } return a; }
-function renderOpts(){
-  const box = $("opts"); box.replaceChildren();
-  shuffle(C.options).forEach(o => box.append(el("label",{}, el("input",{type:"radio",name:"opt",value:o.id}), " " + o.text)));
-  $("bSubmit").onclick = submit;
-}
-function submit(){
-  const pick = document.querySelector("input[name=opt]:checked");
-  const vd = document.querySelector("input[name=vd]:checked");
-  if(!pick || !vd){ showErr("Hãy chọn cả kết luận về tình huống và hướng xử lý trước khi nộp."); return; } showErr("");
-  const vOK = vd.value === C.truth.verdict;
-  const o = C.options.find(x => x.id === pick.value), best = C.options.reduce((a,b) => b.score > a.score ? b : a);
-  const strongSeen = C.docs.filter(d => d.weight === "strong" && seen.has(d.id)).length;
-  const keyUsed = C.tools.filter(t => t.key && used.has(t.id)).length;
-  const score = Math.max(0, Math.min(100, Math.round(o.score * 0.5 + (vOK ? 35 : 0) + Math.min(strongSeen,3)*5 + Math.min(keyUsed,2)*5 + Math.min(asked,3)*1.7)));
-  const coins = Math.round(o.score / 2) + (vOK ? 20 : -25) + (o.score < 40 ? -15 : 0) + strongSeen * 5 + keyUsed * 8 + Math.min(asked,5) * 2;
-  const rating = score >= 85 ? "Thám tử xuất sắc" : score >= 65 ? "Điều tra viên vững" : score >= 40 ? "Cần đối chiếu kỹ hơn" : "Còn dễ bị đánh lừa";
-  if(score >= 50) (C.tactics || []).forEach(t => { if(!S.cards.includes(t.name)) S.cards.push(t.name); });
-  S.coins = Math.max(0, S.coins + coins); S.solved++; S.history.push({title:C.title, level, score, rating}); save(); renderRes(o, best, score, coins, rating, vd.value, vOK);
-}
-const NAMES = {scam:"Lừa đảo", legit:"Hợp pháp", unclear:"Chưa đủ bằng chứng"};
-function renderRes(o, best, score, coins, rating, pv, vOK){
-  const r = $("vRes"); r.replaceChildren();
-  const V = {scam:"Đây là lừa đảo có chủ đích.", legit:"Tình huống này thực chất hợp pháp.", unclear:"Chưa đủ bằng chứng để kết luận."}[C.truth.verdict] || "";
-  r.append(el("h2",{}, "Kết thúc vụ án: " + C.title), el("div",{class:"stamp " + C.truth.verdict}, {scam:"LỪA ĐẢO",legit:"HỢP PHÁP",unclear:"CHƯA RÕ"}[C.truth.verdict] || ""),
-    el("div",{class:"panel"}, el("b",{}, rating + " — " + score + "/100"), el("br"), (coins >= 0 ? "Bạn nhận +" + coins + " xu" : "Bạn mất " + (-coins) + " xu") + " (tính cả manh mối đã mở, câu hỏi hữu ích, kết luận và hướng xử lý" + (vOK ? "" : "; kết luận sai bị trừ 25 xu") + (o.score < 40 ? "; hướng xử lý rủi ro bị trừ 15 xu" : "") + ")."),
-    el("h2",{}, "Sự thật nền"), el("div",{class:"panel"}, el("b",{}, V + " "), C.truth.summary, el("br"), el("span",{class:"mut"}, "Kết luận của bạn: " + NAMES[pv] + (vOK ? " — đúng." : " — chưa đúng."))));
-  const th = $("theory").value.trim(); if(th) r.append(el("p",{class:"mut"}, "Giả thuyết bạn đã viết: " + th));
-  r.append(el("h2",{}, "Lựa chọn của bạn"), el("div",{class:"panel"}, o.text, el("br"), el("span",{class:"mut"}, o.why)));
-  if(best.id !== o.id) r.append(el("div",{class:"panel"}, el("b",{}, "Hướng tốt nhất: "), best.text, el("br"), el("span",{class:"mut"}, best.why)));
-  r.append(el("h2",{}, "Ý nghĩa từng tài liệu"));
-  const names = {strong:"bằng chứng mạnh",weak:"gián tiếp",noise:"gây nhiễu",neutral:"trung tính"};
-  C.docs.forEach(d => r.append(el("div",{class:"doc"}, el("h3",{}, d.title, el("span",{class:"tag " + d.weight}, names[d.weight]), seen.has(d.id) ? "" : el("span",{class:"mut"}," (bạn chưa mở)")), el("p",{}, d.meaning))));
-  if(C.future){ const good = o.score >= 60; r.append(el("h2",{}, "Chuyện gì xảy ra 3 ngày sau?"), el("div",{class:"panel"}, el("b",{}, good ? "Theo lựa chọn của bạn: " : "Theo lựa chọn của bạn (chưa tốt): "), good ? C.future.right : C.future.wrong, el("br"), el("span",{class:"mut"}, "Nếu làm ngược lại: " + (good ? C.future.wrong : C.future.right)))); }
-  if((C.tactics || []).length) r.append(el("h2",{}, "Thẻ thủ đoạn"), ...C.tactics.map(t => el("div",{class:"doc"}, el("h3",{}, t.name), el("p",{}, t.desc))), el("p",{class:"mut"}, score >= 50 ? "Đã thêm vào bộ sưu tập của bạn." : "Cần từ 50 điểm trở lên để nhận thẻ."));
-  r.append(el("h2",{}, "Áp dụng ngoài đời"), el("ul",{}, ...C.tips.map(t => el("li",{}, t))), el("p",{}, el("button",{onclick:() => { renderHist(); view("vStart"); }}, "Về danh sách hồ sơ")));
-  view("vRes");
-}
-initStart();
-</script></main></body></html>
