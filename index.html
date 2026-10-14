@@ -3,33 +3,40 @@
 <title>Thám tử không gian mạng — Click tỉnh táo</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;700&family=Source+Code+Pro:wght@400;600&display=swap&subset=vietnamese" rel="stylesheet">
 <style>
-:root{--bg:#E8EDF1;--ink:#16233B;--panel:#F8FAFB;--line:#B9C4CE;--tag:#D99A00;--bad:#B3261E;--ok:#1F7A5A;--mut:#56657A}
+:root{--bg:#EEF3F6;--ink:#0E2038;--line:#C5D1DB;--tag:#F2A900;--bad:#D7263D;--ok:#1B998B;--mut:#5B6B7F;--acc:#007C80}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 "Be Vietnam Pro",system-ui,"Segoe UI",Arial,sans-serif}
 main{max-width:880px;margin:0 auto;padding:16px}
-header{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:10px 0 14px;border-bottom:2px solid var(--ink)}
-h1{font:700 1.5rem/1.3 "Be Vietnam Pro",system-ui,Arial,sans-serif;margin:0}h2{font:700 1.2rem/1.4 "Be Vietnam Pro",system-ui,Arial,sans-serif;margin:18px 0 8px}
-.stats{display:flex;gap:14px;font-weight:600}.stats span{background:var(--panel);border:1px solid var(--line);padding:4px 10px;border-radius:6px}
-.panel{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:14px;margin:12px 0}
-label{display:block;margin:6px 0}select,textarea,input[type=text]{width:100%;font:inherit;padding:8px;border:1px solid var(--line);border-radius:6px;background:#fff;color:var(--ink)}
-button{font:inherit;font-weight:600;padding:9px 16px;border:2px solid var(--ink);background:var(--ink);color:#fff;border-radius:6px;cursor:pointer}
-button.alt{background:transparent;color:var(--ink)}button:disabled{opacity:.5;cursor:wait}
+header{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;background:var(--ink);color:#fff;margin:-16px -16px 16px;padding:18px 16px;border-radius:0 0 16px 16px}
+h1{font:800 1.45rem/1.3 "Be Vietnam Pro",system-ui,Arial,sans-serif;margin:0}h2{font:700 1.2rem/1.4 "Be Vietnam Pro",system-ui,Arial,sans-serif;margin:20px 0 8px}
+.stats{display:flex;gap:8px;flex-wrap:wrap;font-weight:600;font-size:.92rem}.stats span{background:rgba(255,255,255,.14);padding:4px 12px;border-radius:20px}
+.panel{background:#fff;border:2px solid var(--ink);border-radius:10px;padding:14px;margin:12px 0;box-shadow:4px 4px 0 var(--ink)}
+label{display:block;margin:6px 0}select,textarea,input[type=text]{width:100%;font:inherit;padding:9px;border:2px solid var(--line);border-radius:8px;background:#fff;color:var(--ink)}
+button{font:inherit;font-weight:700;padding:10px 18px;border:2px solid var(--ink);background:var(--acc);color:#fff;border-radius:8px;cursor:pointer;box-shadow:3px 3px 0 var(--ink)}
+button:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
+button.alt{background:#fff;color:var(--ink)}button:disabled{opacity:.5;cursor:wait}
 button:focus-visible,select:focus-visible,textarea:focus-visible,input:focus-visible{outline:3px solid var(--tag);outline-offset:2px}
-.levels{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px}
-.levels label{border:1px solid var(--line);border-radius:6px;padding:10px;background:#fff;margin:0}
-.tabs{display:flex;gap:6px;flex-wrap:wrap;margin:14px 0 0}.tabs button{border-radius:6px 6px 0 0}
-.doc{border:1px solid var(--line);border-left:10px solid var(--tag);background:#fff;padding:10px 12px;margin:10px 0;border-radius:2px 6px 6px 2px}
+.levels{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
+.levels label{border:2px solid var(--line);border-radius:10px;padding:12px;background:#fff;margin:0;cursor:pointer}
+.levels label:has(input:checked){border-color:var(--acc);background:#E3F4F4;box-shadow:3px 3px 0 var(--acc)}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin:14px 0 4px}.tabs button{padding:8px 12px;box-shadow:none;border-radius:10px 10px 4px 4px}
+.tabs button:not(.alt){background:var(--ink)}
+.doc{border:2px solid var(--ink);border-left:12px solid var(--tag);background:#fff;padding:10px 12px;margin:10px 0;border-radius:4px 10px 10px 4px}
 .doc h3{margin:0 0 4px;font-size:1rem}.doc pre{white-space:pre-wrap;font:.92rem/1.6 "Source Code Pro","Courier New",monospace;margin:6px 0 0}
-.chat{max-height:320px;overflow:auto;border:1px solid var(--line);background:#fff;padding:8px;border-radius:6px}
-.msg{margin:6px 0;padding:7px 10px;border-radius:6px;max-width:85%}.me{background:var(--ink);color:#fff;margin-left:auto}.them{background:#E3E9EE}
+.doc button{padding:6px 12px;box-shadow:2px 2px 0 var(--ink)}
+.chat{max-height:320px;overflow:auto;border:2px solid var(--line);background:#fff;padding:8px;border-radius:10px}
+.msg{margin:6px 0;padding:8px 12px;border-radius:14px;max-width:85%}.me{background:var(--acc);color:#fff;margin-left:auto;border-bottom-right-radius:4px}.them{background:#E3E9EE;border-bottom-left-radius:4px}
 .row{display:flex;gap:8px;margin-top:8px}.row input{flex:1}
-.err{background:#FBE9E7;border:1px solid var(--bad);color:var(--bad);padding:10px;border-radius:6px;margin:10px 0}
-.tag{display:inline-block;font-size:.8rem;padding:1px 8px;border-radius:10px;color:#fff;margin-left:6px}
-.strong{background:var(--bad)}.weak{background:var(--tag)}.noise{background:var(--mut)}.neutral{background:#7C8B9C}
+.err{background:#FDE8EB;border:2px solid var(--bad);color:#8F1424;padding:10px 12px;border-radius:10px;margin:10px 0}
+.news{background:#FFF1C9;border:2px solid var(--tag);padding:8px 12px;border-radius:10px;margin:8px 0}
+.tag{display:inline-block;font-size:.8rem;padding:1px 9px;border-radius:10px;color:#fff;margin-left:6px}
+.strong{background:var(--bad)}.weak{background:#9A6A00}.noise{background:var(--mut)}.neutral{background:#6B7A8C}
+.stamp{display:inline-block;font:800 1.8rem/1 "Be Vietnam Pro",system-ui,sans-serif;border:5px solid;padding:8px 18px;border-radius:8px;transform:rotate(-5deg);margin:6px 0 12px;background:#fff}
+.stamp.scam{color:var(--bad)}.stamp.legit{color:var(--ok)}.stamp.unclear{color:#8A6100}
 .hide{display:none}.mut{color:var(--mut)}
-@media(max-width:520px){.msg{max-width:95%}.stats{font-size:.9rem}}
-@media(prefers-reduced-motion:no-preference){.doc{transition:border-color .2s}}
+@media(prefers-reduced-motion:no-preference){.stamp{animation:st .45s cubic-bezier(.2,1.6,.4,1)}@keyframes st{from{transform:rotate(-5deg) scale(2.2);opacity:0}}}
+@media(max-width:520px){.msg{max-width:95%}h1{font-size:1.25rem}}
 </style></head><body><main>
-<header><h1>Thám tử không gian mạng</h1><div class="stats"><span id="sCoin"></span><span id="sSolved"></span></div></header>
+<header><h1>🕵️ Thám tử không gian mạng</h1><div class="stats"><span id="sCoin"></span><span id="sSolved"></span></div></header>
 <div id="err" class="err hide" role="alert"></div>
 
 <section id="vStart">
@@ -42,10 +49,11 @@ button:focus-visible,select:focus-visible,textarea:focus-visible,input:focus-vis
 </section>
 
 <section id="vCase" class="hide">
- <h2 id="cTitle"></h2><p id="cIntro"></p>
- <div class="tabs"><button data-t="docs">Bằng chứng</button><button class="alt" data-t="talk">Thẩm vấn</button><button class="alt" data-t="decide">Kết luận</button></div>
+ <h2 id="cTitle"></h2><p id="cIntro"></p><div id="ev" aria-live="polite"></div>
+ <div class="tabs"><button data-t="docs">📁 Bằng chứng</button><button class="alt" data-t="tools">🛠️ Công cụ</button><button class="alt" data-t="talk">💬 Thẩm vấn</button><button class="alt" data-t="decide">⚖️ Kết luận</button></div>
  <div class="panel">
   <div id="tdocs"></div>
+  <div id="ttools" class="hide"></div>
   <div id="ttalk" class="hide">
    <label>Hỏi ai? <select id="who"></select></label>
    <div class="chat" id="chat" aria-live="polite"></div>
@@ -71,10 +79,10 @@ const LV = [["Tập sự","Có hướng dẫn, dấu hiệu khá rõ.",0],["Đi�
 const TOPICS = ["Ngẫu nhiên","Tuyển dụng, việc nhẹ lương cao","Trúng thưởng, hoàn tiền giả","Giả danh ngân hàng, tổ chức tài chính","Chiếm đoạt tài khoản mạng xã hội","Mua bán trực tuyến, biên lai giả","Mạo danh người thân, bạn bè, giáo viên","Học bổng, tuyển sinh","Hỗ trợ kỹ thuật, chăm sóc khách hàng giả","Hội nhóm, hoạt động cộng đồng","Giả mạo danh tính, hồ sơ, giấy tờ","QR code, trang đăng nhập giả","Kết hợp nhiều thủ đoạn"];
 const $ = id => document.getElementById(id);
 function el(tag, props = {}, ...kids){const e=document.createElement(tag);for(const k in props){if(k==="class")e.className=props[k];else if(k.startsWith("on"))e[k]=props[k];else e.setAttribute(k,props[k]);}for(const c of kids)e.append(c);return e;}
-let S = {coins:100,solved:0,history:[]}, level = 1, C = null, seen = new Set(), asked = 0, hist = [], hints = 0, busy = false;
+let S = {coins:100,solved:0,history:[],cards:[]}, level = 1, acts = 0, used = new Set(), shownEv = new Set(), C = null, seen = new Set(), asked = 0, hist = [], hints = 0, busy = false;
 try { S = Object.assign(S, JSON.parse(localStorage.getItem("ttkgm") || "{}")); } catch {}
 const save = () => { try { localStorage.setItem("ttkgm", JSON.stringify(S)); } catch {} stats(); };
-function stats(){ $("sCoin").textContent = "Xu: " + S.coins; $("sSolved").textContent = "Đã giải: " + S.solved; }
+function stats(){ $("sCoin").textContent = "🪙 Xu: " + S.coins; $("sSolved").textContent = "✅ Đã giải: " + S.solved + "   🃏 Thẻ: " + S.cards.length; }
 function showErr(m){ $("err").textContent = m; $("err").classList.toggle("hide", !m); }
 function view(v){ ["vStart","vCase","vRes"].forEach(x => $(x).classList.toggle("hide", x !== v)); scrollTo(0,0); }
 
@@ -101,11 +109,11 @@ async function call1(path, body){
 function initStart(){
   const box = $("levels");
   LV.forEach((l,i) => { const r = el("input",{type:"radio",name:"lv",value:i+1}); if(i===0) r.checked = true; r.onchange = () => level = i+1;
-    box.append(el("label",{}, r, " ", el("b",{}, l[0]), el("br"), el("span",{class:"mut"}, l[1] + (l[2] ? " (−" + l[2] + " xu)" : " (miễn phí)")))); });
+    box.append(el("label",{}, r, " ", el("b",{}, ["🔰","🔍","🕵️"][i] + " " + l[0]), el("br"), el("span",{class:"mut"}, l[1] + (l[2] ? " (−" + l[2] + " xu)" : " (miễn phí)")))); });
   TOPICS.forEach(t => $("topic").append(el("option",{}, t)));
   $("bNew").onclick = newCase; refreshBtn(); renderHist(); stats();
 }
-function refreshBtn(){ $("bNew").textContent = "Mở hồ sơ mới" + (LV[level-1][2] ? " (−" + LV[level-1][2] + " xu)" : ""); }
+function refreshBtn(){ $("bNew").textContent = "📂 Mở hồ sơ mới" + (LV[level-1][2] ? " (−" + LV[level-1][2] + " xu)" : ""); }
 document.addEventListener("change", e => { if(e.target.name === "lv") refreshBtn(); });
 function renderHist(){
   const h = $("hist"); h.replaceChildren();
@@ -120,21 +128,32 @@ async function newCase(){
   try{
     const topic = $("topic").value;
     const d = await call("/api/case", {level, topic: topic === "Ngẫu nhiên" ? "" : topic, recent: S.history.map(h => h.title)});
-    S.coins -= cost; save(); C = d.case; seen = new Set(); asked = 0; hist = []; hints = 0;
+    S.coins -= cost; save(); C = d.case; seen = new Set(); asked = 0; hist = []; hints = 0; acts = 0; used = new Set(); shownEv = new Set(); $("ev").replaceChildren();
     $("cTitle").textContent = C.title; $("cIntro").textContent = C.intro; $("theory").value = ""; document.querySelectorAll("input[name=vd]").forEach(r => r.checked = false);
-    renderDocs(); renderTalk(); renderOpts(); tab("docs"); view("vCase");
+    renderDocs(); renderTools(); renderTalk(); renderOpts(); tab("docs"); view("vCase");
   }catch(e){ showErr("Không tạo được vụ án: " + e.message); }
   finally{ busy = false; $("bNew").disabled = false; $("busy").classList.add("hide"); }
 }
 
-function tab(t){ document.querySelectorAll(".tabs button").forEach(b => b.classList.toggle("alt", b.dataset.t !== t)); ["docs","talk","decide"].forEach(x => $("t"+x).classList.toggle("hide", x !== t)); }
+function tab(t){ document.querySelectorAll(".tabs button").forEach(b => b.classList.toggle("alt", b.dataset.t !== t)); ["docs","tools","talk","decide"].forEach(x => $("t"+x).classList.toggle("hide", x !== t)); }
 document.querySelectorAll(".tabs button").forEach(b => b.onclick = () => tab(b.dataset.t));
 
 function renderDocs(){
   const box = $("tdocs"); box.replaceChildren(el("p",{class:"mut"},"Mở từng tài liệu để đọc. Không phải chi tiết lạ nào cũng chứng minh được điều gì."));
   C.docs.forEach(d => { const open = seen.has(d.id);
     const card = el("div",{class:"doc"}, el("h3",{}, d.title));
-    if(open) card.append(el("pre",{}, d.text)); else card.append(el("button",{class:"alt",onclick:() => { seen.add(d.id); renderDocs(); }}, "Xem tài liệu"));
+    if(open) card.append(el("pre",{}, d.text)); else card.append(el("button",{class:"alt",onclick:() => { seen.add(d.id); renderDocs(); act(); }}, "Xem tài liệu"));
+    box.append(card); });
+}
+function act(){
+  acts++;
+  (C.events || []).forEach((e, i) => { if(!shownEv.has(i) && e.after <= acts){ shownEv.add(i); $("ev").append(el("div",{class:"news"}, el("b",{}, "Tin mới" + (e.from ? " từ " + e.from : "") + ": "), e.text)); } });
+}
+function renderTools(){
+  const box = $("ttools"); box.replaceChildren(el("p",{class:"mut"},"Mỗi công cụ tốn xu nhưng có thể cho thông tin quyết định. Kết quả đôi khi chưa rõ ràng."));
+  C.tools.forEach(t => { const u = used.has(t.id);
+    const card = el("div",{class:"doc"}, el("h3",{}, t.name));
+    if(u) card.append(el("pre",{}, t.result)); else card.append(el("button",{class:"alt",onclick:() => { if(S.coins < t.cost){ showErr("Không đủ xu để dùng công cụ này."); return; } showErr(""); S.coins -= t.cost; save(); used.add(t.id); renderTools(); act(); }}, "Dùng (−" + t.cost + " xu)"));
     box.append(card); });
 }
 function renderTalk(){
@@ -147,7 +166,7 @@ async function ask(){
   bubble("me", q); $("q").value = ""; const wait = bubble("them mut", "…");
   try{
     const d = await call("/api/chat", {case:C, characterId:$("who").value, message:q, history:hist});
-    hist.push({role:"user",text:q},{role:"ai",text:d.reply}); asked++; wait.className = "msg them"; wait.textContent = d.reply;
+    hist.push({role:"user",text:q},{role:"ai",text:d.reply}); asked++; act(); wait.className = "msg them"; wait.textContent = d.reply;
   }catch(e){ wait.remove(); showErr("Không hỏi được: " + e.message); }
   finally{ busy = false; $("bAsk").disabled = false; }
 }
@@ -170,16 +189,18 @@ function submit(){
   const vOK = vd.value === C.truth.verdict;
   const o = C.options.find(x => x.id === pick.value), best = C.options.reduce((a,b) => b.score > a.score ? b : a);
   const strongSeen = C.docs.filter(d => d.weight === "strong" && seen.has(d.id)).length;
-  const score = Math.max(0, Math.min(100, Math.round(o.score * 0.5 + (vOK ? 35 : 0) + Math.min(strongSeen,3)*5 + Math.min(asked,3)*1.7)));
-  const coins = Math.round(o.score / 2) + (vOK ? 20 : -25) + (o.score < 40 ? -15 : 0) + strongSeen * 5 + Math.min(asked,5) * 2;
+  const keyUsed = C.tools.filter(t => t.key && used.has(t.id)).length;
+  const score = Math.max(0, Math.min(100, Math.round(o.score * 0.5 + (vOK ? 35 : 0) + Math.min(strongSeen,3)*5 + Math.min(keyUsed,2)*5 + Math.min(asked,3)*1.7)));
+  const coins = Math.round(o.score / 2) + (vOK ? 20 : -25) + (o.score < 40 ? -15 : 0) + strongSeen * 5 + keyUsed * 8 + Math.min(asked,5) * 2;
   const rating = score >= 85 ? "Thám tử xuất sắc" : score >= 65 ? "Điều tra viên vững" : score >= 40 ? "Cần đối chiếu kỹ hơn" : "Còn dễ bị đánh lừa";
+  if(score >= 50) (C.tactics || []).forEach(t => { if(!S.cards.includes(t.name)) S.cards.push(t.name); });
   S.coins = Math.max(0, S.coins + coins); S.solved++; S.history.push({title:C.title, level, score, rating}); save(); renderRes(o, best, score, coins, rating, vd.value, vOK);
 }
 const NAMES = {scam:"Lừa đảo", legit:"Hợp pháp", unclear:"Chưa đủ bằng chứng"};
 function renderRes(o, best, score, coins, rating, pv, vOK){
   const r = $("vRes"); r.replaceChildren();
   const V = {scam:"Đây là lừa đảo có chủ đích.", legit:"Tình huống này thực chất hợp pháp.", unclear:"Chưa đủ bằng chứng để kết luận."}[C.truth.verdict] || "";
-  r.append(el("h2",{}, "Kết thúc vụ án: " + C.title),
+  r.append(el("h2",{}, "Kết thúc vụ án: " + C.title), el("div",{class:"stamp " + C.truth.verdict}, {scam:"LỪA ĐẢO",legit:"HỢP PHÁP",unclear:"CHƯA RÕ"}[C.truth.verdict] || ""),
     el("div",{class:"panel"}, el("b",{}, rating + " — " + score + "/100"), el("br"), (coins >= 0 ? "Bạn nhận +" + coins + " xu" : "Bạn mất " + (-coins) + " xu") + " (tính cả manh mối đã mở, câu hỏi hữu ích, kết luận và hướng xử lý" + (vOK ? "" : "; kết luận sai bị trừ 25 xu") + (o.score < 40 ? "; hướng xử lý rủi ro bị trừ 15 xu" : "") + ")."),
     el("h2",{}, "Sự thật nền"), el("div",{class:"panel"}, el("b",{}, V + " "), C.truth.summary, el("br"), el("span",{class:"mut"}, "Kết luận của bạn: " + NAMES[pv] + (vOK ? " — đúng." : " — chưa đúng."))));
   const th = $("theory").value.trim(); if(th) r.append(el("p",{class:"mut"}, "Giả thuyết bạn đã viết: " + th));
@@ -188,6 +209,8 @@ function renderRes(o, best, score, coins, rating, pv, vOK){
   r.append(el("h2",{}, "Ý nghĩa từng tài liệu"));
   const names = {strong:"bằng chứng mạnh",weak:"gián tiếp",noise:"gây nhiễu",neutral:"trung tính"};
   C.docs.forEach(d => r.append(el("div",{class:"doc"}, el("h3",{}, d.title, el("span",{class:"tag " + d.weight}, names[d.weight]), seen.has(d.id) ? "" : el("span",{class:"mut"}," (bạn chưa mở)")), el("p",{}, d.meaning))));
+  if(C.future){ const good = o.score >= 60; r.append(el("h2",{}, "Chuyện gì xảy ra 3 ngày sau?"), el("div",{class:"panel"}, el("b",{}, good ? "Theo lựa chọn của bạn: " : "Theo lựa chọn của bạn (chưa tốt): "), good ? C.future.right : C.future.wrong, el("br"), el("span",{class:"mut"}, "Nếu làm ngược lại: " + (good ? C.future.wrong : C.future.right)))); }
+  if((C.tactics || []).length) r.append(el("h2",{}, "Thẻ thủ đoạn"), ...C.tactics.map(t => el("div",{class:"doc"}, el("h3",{}, t.name), el("p",{}, t.desc))), el("p",{class:"mut"}, score >= 50 ? "Đã thêm vào bộ sưu tập của bạn." : "Cần từ 50 điểm trở lên để nhận thẻ."));
   r.append(el("h2",{}, "Áp dụng ngoài đời"), el("ul",{}, ...C.tips.map(t => el("li",{}, t))), el("p",{}, el("button",{onclick:() => { renderHist(); view("vStart"); }}, "Về danh sách hồ sơ")));
   view("vRes");
 }
